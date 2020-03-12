@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#calculator-body {
+  background: #363636;
+  width: 800px;
+  display: grid; /* create a grid */
+  grid-template-columns: repeat(4, 200px);
+  grid-auto-rows: 100px;
+}
+
+#calculator-body > div {
+  background-color: #8ca0ff;
+  width: 50px;
+  height: 50px;
+}
+
+#display {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
