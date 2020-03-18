@@ -14,22 +14,22 @@
     <button id=")" class="operator">)</button>
     <button id="DEL" class="operator">DEL</button>
     <button id="AC" class="operator">AC</button>
-    <button id="seven">7</button>
+    <button id="seven" data-numbers="7">7</button>
     
-    <button id="eight">8</button>
-    <button id="nine">9</button>
+    <button id="eight" data-numbers="8">8</button>
+    <button id="nine" data-numbers="9">9</button>
     <button id="divide" class="operator">÷</button>
-    <button id="four">4</button>
-    <button id="five">5</button>
+    <button id="four" data-numbers="4">4</button>
+    <button id="five" data-numbers="5">5</button>
     
-    <button id="six">6</button>
+    <button id="six" data-numbers="6">6</button>
     <button id="multiply" class="operator">X</button>
-    <button id="one">1</button>
-    <button id="two">2</button>
-    <button id="three">3</button>
+    <button id="one" data-numbers="1">1</button>
+    <button id="two" data-numbers="2">2</button>
+    <button id="three" data-numbers="3">3</button>
     
     <button id="subtract" class="operator">-</button>
-    <button id="zero">0</button>
+    <button id="zero" data-numbers="0">0</button>
     <button id="decimal">.</button>
     <button id="equal" class="operator">=</button>
     <button id="add" class="operator">+</button>
@@ -37,4 +37,26 @@
 
   </div>
 </body>
+<script>
+  const calculatorBody = document.getElementById('calculator-body');
+  const buttons = document.querySelectorAll('button[data-numbers]');
+  const display = document.getElementById('display');
+  let displayValue = '';
+
+  function populateDisplay() {
+    display.innerHTML = displayValue;
+  }
+
+  
+  
+  buttons.forEach(button => {
+    button.addEventListener('click', event => {
+      displayValue += event.target.getAttribute("data-numbers");
+      populateDisplay();
+    })
+  })
+  // Now how can I add eventlisterns for all number buttons
+
+</script>
+
 </html>
