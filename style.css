@@ -25,7 +25,8 @@
 }
 
 #calculator-body > button:hover {
-  background: #000;
+  background: #d7d9dd;
+  border-color: #d7d9dd;
 }
 
 
@@ -49,5 +50,7 @@
   grid-column-end: 5;
   grid-row-start: 1;
   grid-row-end: 3;
-
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  background: white;
 }
