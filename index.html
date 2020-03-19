@@ -18,21 +18,21 @@
     
     <button id="eight" data-numbers="8">8</button>
     <button id="nine" data-numbers="9">9</button>
-    <button id="divide" class="operator">÷</button>
+    <button id="divide" data-operator="÷">÷</button>
     <button id="four" data-numbers="4">4</button>
     <button id="five" data-numbers="5">5</button>
     
     <button id="six" data-numbers="6">6</button>
-    <button id="multiply" class="operator">X</button>
+    <button id="multiply" data-operator="x">x</button>
     <button id="one" data-numbers="1">1</button>
     <button id="two" data-numbers="2">2</button>
     <button id="three" data-numbers="3">3</button>
     
-    <button id="subtract" class="operator">-</button>
+    <button id="subtract" data-operator="-">-</button>
     <button id="zero" data-numbers="0">0</button>
     <button id="decimal">.</button>
     <button id="equal" class="operator">=</button>
-    <button id="add" class="operator">+</button>
+    <button id="add"  data-operator="+">+</button>
     
 
   </div>
@@ -40,22 +40,94 @@
 <script>
   const calculatorBody = document.getElementById('calculator-body');
   const buttons = document.querySelectorAll('button[data-numbers]');
+  const operators = document.querySelectorAll('button[data-operator]');
   const display = document.getElementById('display');
+  const equal = document.getElementById('equal');
   let displayValue = '';
+  
+  // Let's say we store the value, if one of the basic operators has been
+  // clicked.
+  let currentInput = ''; 
+  let inputList = [];
+  let currentOperator = '';
+  let operatorList = [];
 
+  // Displays the value and operators that has been clicked.
   function populateDisplay() {
     display.innerHTML = displayValue;
   }
 
+  // clear each user Input before the operator clicked
+  function clearInput() {
+    currentInput = '';
+  }
+
+  function checkBasicOperator(givenStr) {
+    if (givenStr === '+') {
+      
+    } else if(givenStr === '-') {
+
+    } else if(givenStr === 'x') {
+
+    } else if(givenStr === '÷') {
+
+    } else {
+      // Not one of the operators
+    }
+  }
+
+  function extractNumbers(array1) {
+    return array1.filter(str1 => isNaN(str1) == false) 
+  }
+
+  function putNumbersIntoTheList(array1) {
+    // Creates a new array with just numbers
+
+    inputList = extractNumbers(array1);
+  }
+
   
+
   
+
+
+
+  // Delete Function, Delete one operator or 
+
+  
+  // Event Listeners for all digits
   buttons.forEach(button => {
     button.addEventListener('click', event => {
+      currentInput += event.target.getAttribute("data-numbers");
       displayValue += event.target.getAttribute("data-numbers");
       populateDisplay();
     })
   })
-  // Now how can I add eventlisterns for all number buttons
+  
+  // Event Listeners for four basic operators
+  operators.forEach(operator => {
+    operator.addEventListener('click', event => {
+
+      currentOperator = event.target.getAttribute("data-operator");
+      operatorList.push(currentOperator);
+
+      displayValue += ' ' + event.target.getAttribute("data-operator") + ' ';
+      populateDisplay();
+      
+    })
+  })
+
+  // If equal is clicked, calculate the all the numbers regarding the operators
+  equal.addEventListener('click', event => {
+    let displayValueArray = displayValue.split(" ");
+    putNumbersIntoTheList(displayValueArray);
+    console.log(`inputList: ${inputList}`);
+    console.log(`operatorList: ${operatorList}`);
+
+    console.log(`displayValueArray: ${displayValueArray}`);
+    
+  })
+  
 
 </script>
 
