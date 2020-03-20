@@ -63,6 +63,7 @@
   }
 
   function doBasicOperation(firstNum, secondNum, operator) {
+    console.log('doBasicOperation function running');
     firstNum = Number(firstNum);
     secondNum = Number(secondNum);
 
@@ -88,7 +89,35 @@
   // If user presses '=' on calculator, play operate function
   // This one will update the display with the 'solution'
   function operate(numbers, operators) {
-    let sum = doBasicOperation(numbers[0], numbers[1], operators[0]);
+    console.log('operate function running:');
+    let sum = 0;
+    let count = 0;
+
+    for (let i = 0; i < numbers.length-1; i++) {
+      // If it's the first run, just do the operation on first 2 numbers
+      if (i == 0) {
+        sum += doBasicOperation(numbers[i], numbers[i+1], operators[i]);
+
+        console.log(`${i+1} Opeartion: ${numbers[i]} ${operators[i]} ${numbers[i+1]}`);
+        console.log(`sum: ${sum}`);    
+        count++;
+        continue;
+      }
+
+      // After the first run, we need to the operation on sum and next number
+      
+      console.log(`${i+1} Opeartion: ${sum} ${operators[i]} ${numbers[i+1]}`);
+      sum = doBasicOperation(sum, numbers[i+1], operators[i]);
+      console.log(`sum: ${sum}`);    
+      count++;
+    }
+
+    console.log(`numbers: ${numbers}`);
+    console.log(`operators: ${operators}`);
+    console.log(`times it run: ${count}`);
+    console.log(`sum: ${sum}`);
+    
+    
     display.innerHTML = sum;
   }
 
