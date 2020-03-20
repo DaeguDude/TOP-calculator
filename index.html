@@ -62,18 +62,19 @@
     currentInput = '';
   }
 
-  function checkBasicOperator(givenStr) {
-    if (givenStr === '+') {
-      
-    } else if(givenStr === '-') {
+  function doBasicOperation(firstNum, secondNum, operator) {
+    firstNum = Number(firstNum);
+    secondNum = Number(secondNum);
 
-    } else if(givenStr === 'x') {
-
-    } else if(givenStr === '÷') {
-
-    } else {
-      // Not one of the operators
-    }
+    if (operator === '+') {
+      return firstNum + secondNum;
+    } else if (operator === '-') {
+      return firstNum - secondNum;
+    } else if (operator === 'x') {
+      return firstNum * secondNum;
+    } else if (operator === '÷') {
+      return firstNum / secondNum;
+    } 
   }
 
   function extractNumbers(array1) {
@@ -81,9 +82,14 @@
   }
 
   function putNumbersIntoTheList(array1) {
-    // Creates a new array with just numbers
-
     inputList = extractNumbers(array1);
+  }
+
+  // If user presses '=' on calculator, play operate function
+  // This one will update the display with the 'solution'
+  function operate(numbers, operators) {
+    let sum = doBasicOperation(numbers[0], numbers[1], operators[0]);
+    display.innerHTML = sum;
   }
 
   
@@ -121,10 +127,10 @@
   equal.addEventListener('click', event => {
     let displayValueArray = displayValue.split(" ");
     putNumbersIntoTheList(displayValueArray);
-    console.log(`inputList: ${inputList}`);
-    console.log(`operatorList: ${operatorList}`);
 
-    console.log(`displayValueArray: ${displayValueArray}`);
+    console.log(inputList);
+    console.log(operatorList);
+    operate(inputList, operatorList);
     
   })
   
