@@ -86,6 +86,22 @@
     inputList = extractNumbers(array1);
   }
 
+  function isMultiplicationOrDivision(operator) {
+    return (operator == 'x' || operator == '÷') ? true : false;
+  }
+
+  function findIndexMultiplicationAndDivision(array1) {
+    let indexLocations = []
+    
+    for (let i = 0; i < array1.length; i++) {
+      if(isMultiplicationOrDivision(array1[i])) {
+        indexLocations.push(i);
+      } 
+    }
+
+    return indexLocations;
+  }
+
   // If user presses '=' on calculator, play operate function
   // This one will update the display with the 'solution'
   function operate(numbers, operators) {
@@ -94,10 +110,14 @@
     let count = 0;
 
     for (let i = 0; i < numbers.length-1; i++) {
-      // If it's the first run, just do the operation on first 2 numbers
-      if (i == 0) {
-        sum += doBasicOperation(numbers[i], numbers[i+1], operators[i]);
-        continue;
+      currentOperator = operator[i];
+      nextOperator = operator[i+1];
+
+      
+      if(isMultiplicationOrDivision(nextOperator)) {
+        
+      } else {
+
       }
 
       // After the first run, we need to the operation on sum and next number
