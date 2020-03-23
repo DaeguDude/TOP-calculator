@@ -67,6 +67,9 @@
     firstNum = Number(firstNum);
     secondNum = Number(secondNum);
 
+    console.log(`firstNum: ${firstNum}`);
+    console.log(`secondNum: ${secondNum}`);
+
     if (operator === '+') {
       return firstNum + secondNum;
     } else if (operator === '-') {
@@ -102,40 +105,59 @@
     return indexLocations;
   }
 
-  // If user presses '=' on calculator, play operate function
-  // This one will update the display with the 'solution'
-  function operate(numbers, operators) {
-    console.log('operate function running:');
-    let sum = 0;
-    let count = 0;
+  function returnWithoutMultiplicationAndDivision(numbers, operators) {
+  let sum = 0;
+  let index = 0;
+  let operatorsLength = operators.length;
 
-    for (let i = 0; i < numbers.length-1; i++) {
-      currentOperator = operator[i];
-      nextOperator = operator[i+1];
+  for (let i = 0; i < operatorsLength; i++) {     
+    let currentOperator = operators[index];
+    let numOne = numbers[index];
+    let numTwo = numbers[index+1];
 
-      
-      if(isMultiplicationOrDivision(nextOperator)) {
-        
-      } else {
+    if(isMultiplicationOrDivision(operators[index])) {
+      let currentResult = 0;// If it's multiplication or Division
+      currentResult = doBasicOperation(numOne, numTwo, currentOperator);
 
-      }
+      console.log(`${numOne} ${currentOperator} ${numTwo} = ${currentResult}`);
 
-      // After the first run, we need to the operation on sum and next number
-      sum = doBasicOperation(sum, numbers[i+1], operators[i]);
+      numbers.splice(index, 2, currentResult);
+      operators.splice(index, 1);
+    } else {
+      index++;  
+    }
+  }
+}
+  
+  function calculateNumbers(numbers, operators) {
+  let sum = 0;
+
+  for (let i = 0; i < operators.length; i++) {     
+    let currentOperator = operators[i]
+
+    if (i == 0) { // if it's the first run, do operation and skip
+      sum = doBasicOperation(numbers[i], numbers[i+1], currentOperator);
+      continue;
     }
 
-    display.innerHTML = sum;
+    // Otherwise...
+    sum = doBasicOperation(sum, numbers[i+1], operators[i]); 
   }
 
-  
+  return sum;
+}
 
-  
+  function operate(numbers, operators) {
+    let calculatedValue = 0;
+    
+    returnWithoutMultiplicationAndDivision(numbers, operators);
+    console.log(numbers, operators);
+    calculatedValue = calculateNumbers(numbers, operators);
+    console.log(numbers, operators);
+   
+    display.innerHTML = calculatedValue;
+  }
 
-
-
-  // Delete Function, Delete one operator or 
-
-  
   // Event Listeners for all digits
   buttons.forEach(button => {
     button.addEventListener('click', event => {
