@@ -1,5 +1,8 @@
-let numbers = [5, 10, 11, 2, 5];
-let operators = ['x', '-', '+', '÷'];
+let numberList = [5, 10, 15, 20, 5, 10, 10];
+let operatorList = ['+', 'x', 'x', '÷', '+', '+'];
+
+let numbers = [];
+let operators = [];
 
 function doBasicOperation(firstNum, secondNum, operator) {
   console.log('doBasicOperation function running');
@@ -46,6 +49,8 @@ function returnWithoutMultiplicationAndDivision(numbers, operators) {
       index++;  
     }
   }
+
+  return [numbers, operators];
 }
 
 function calculateNumbers(numbers, operators) {
@@ -66,11 +71,10 @@ function calculateNumbers(numbers, operators) {
   return sum;
 }
 
-function operate(numbers, operators) {
-  returnWithoutMultiplicationAndDivision(numbers, operators);
-  calculateNumbers(numbers, operators);
-  
-}
+numbers = returnWithoutMultiplicationAndDivision(numberList, operatorList)[0];
+operators = returnWithoutMultiplicationAndDivision(numberList, operatorList)[1];
+console.log(numbers);
+console.log(operators);
 
-// How to take 2 numbers out of the array
-operate(numbers, operators);
+console.log(calculateNumbers(numbers, operators));
+

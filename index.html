@@ -62,13 +62,11 @@
     currentInput = '';
   }
 
+
   function doBasicOperation(firstNum, secondNum, operator) {
-    console.log('doBasicOperation function running');
+   
     firstNum = Number(firstNum);
     secondNum = Number(secondNum);
-
-    console.log(`firstNum: ${firstNum}`);
-    console.log(`secondNum: ${secondNum}`);
 
     if (operator === '+') {
       return firstNum + secondNum;
@@ -93,73 +91,71 @@
     return (operator == 'x' || operator == '÷') ? true : false;
   }
 
-  function findIndexMultiplicationAndDivision(array1) {
-    let indexLocations = []
-    
-    for (let i = 0; i < array1.length; i++) {
-      if(isMultiplicationOrDivision(array1[i])) {
-        indexLocations.push(i);
-      } 
-    }
-
-    return indexLocations;
-  }
-
+  // It takes number List and operator List, and return
+  // numbers List calculated regarding to the multiplications and 
+  // Divisions, and return operators without any multiplications and
+  // Divisions.
   function returnWithoutMultiplicationAndDivision(numbers, operators) {
-  let sum = 0;
-  let index = 0;
-  let operatorsLength = operators.length;
+    let sum = 0;
+    let index = 0;
+    let operatorsLength = operators.length;
 
-  for (let i = 0; i < operatorsLength; i++) {     
-    let currentOperator = operators[index];
-    let numOne = numbers[index];
-    let numTwo = numbers[index+1];
+    for (let i = 0; i < operatorsLength; i++) {     
+      let currentOperator = operators[index];
+      let numOne = numbers[index];
+      let numTwo = numbers[index+1];
 
-    if(isMultiplicationOrDivision(operators[index])) {
-      let currentResult = 0;// If it's multiplication or Division
-      currentResult = doBasicOperation(numOne, numTwo, currentOperator);
+      if(isMultiplicationOrDivision(operators[index])) {
+        let currentResult = 0;// If it's multiplication or Division
+        currentResult = doBasicOperation(numOne, numTwo, currentOperator);
 
-      console.log(`${numOne} ${currentOperator} ${numTwo} = ${currentResult}`);
+        console.log(`${numOne} ${currentOperator} ${numTwo} = ${currentResult}`);
 
-      numbers.splice(index, 2, currentResult);
-      operators.splice(index, 1);
-    } else {
-      index++;  
+        numbers.splice(index, 2, currentResult);
+        operators.splice(index, 1);
+      } else {
+        index++;  
+      }
     }
-  }
+  return [numbers, operators];
 }
   
+  // It takes number & operator Lists without multiplications and divisions
+  // and return the sum after operating all the operations on the numbers
+  // regarding to operators.
   function calculateNumbers(numbers, operators) {
-  let sum = 0;
+    let sum = 0;
 
-  for (let i = 0; i < operators.length; i++) {     
-    let currentOperator = operators[i]
+    for (let i = 0; i < operators.length; i++) {     
+      let currentOperator = operators[i]
 
-    if (i == 0) { // if it's the first run, do operation and skip
-      sum = doBasicOperation(numbers[i], numbers[i+1], currentOperator);
-      continue;
+      if (i == 0) { // if it's the first run, do operation and skip
+        sum = doBasicOperation(numbers[i], numbers[i+1], currentOperator);
+        continue;
+      }
+
+      // Otherwise...
+      sum = doBasicOperation(sum, numbers[i+1], operators[i]); 
     }
 
-    // Otherwise...
-    sum = doBasicOperation(sum, numbers[i+1], operators[i]); 
+    console.log(`sum in calculatedNumbers function: ${sum}`);
+    return sum;
   }
 
-  return sum;
-}
-
-
-// ****************************************************************
-// ****************************************************************
-// Calculations with only * and / not working. Why?
   function operate(numbers, operators) {
-    let calculatedValue = 0;
+    let sum = 0;
     
-    returnWithoutMultiplicationAndDivision(numbers, operators);
-    console.log(numbers, operators);
-    calculatedValue = calculateNumbers(numbers, operators);
-    console.log(numbers, operators);
-   
-    display.innerHTML = calculatedValue;
+    numbers = returnWithoutMultiplicationAndDivision(numbers, operators)[0];
+    operators = returnWithoutMultiplicationAndDivision(numbers, operators)[1];
+    
+    // so...if there's nothing left in the operator...it's done
+    if (operators.length == 0) {
+      sum = numbers[0];
+    } else { // if there's some operators left in the operator
+      sum = calculateNumbers(numbers, operators);
+    }
+    
+    display.innerHTML = sum;
   }
 
   // Event Listeners for all digits
