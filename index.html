@@ -86,6 +86,8 @@
     inputList = extractNumbers(array1);
   }
 
+// DONE
+// Check for if it's one of the basic operators
   function isOperator(operator) {
     if (
       operator === '+'
@@ -154,10 +156,13 @@
     return sum;
   }
 
-  function operate(numbers, operators) {
+  // Now it's time to read display Value
+  function operate() {
     let sum = 0;
-    console.log(numbers);
-    console.log(operators);
+
+    let displayValueSplitted = displayValue.split('');
+    console.log(displayValueSplitted);
+    
     
     numbers = returnWithoutMultiplicationAndDivision(numbers, operators)[0];
     operators = returnWithoutMultiplicationAndDivision(numbers, operators)[1];
@@ -217,7 +222,7 @@
 
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
-    operate(numberList, operatorList);
+    operate();
     
   })
 

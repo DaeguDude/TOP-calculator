@@ -1,80 +1,44 @@
-let numberList = [5, 10, 15, 20, 5, 10, 10];
-let operatorList = ['+', 'x', 'x', '÷', '+', '+'];
+// How do you separate numbers and operators?
+function isOperator(operator) {
+  if (
+    operator === '+'
+    || operator === '-'
+    || operator === 'x'
+    || operator === '÷'
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-let numbers = [];
-let operators = [];
+// Can you separate numbers from operators?
+let displayValue = '578+320x10';
 
-function doBasicOperation(firstNum, secondNum, operator) {
-  console.log('doBasicOperation function running');
-  firstNum = Number(firstNum);
-  secondNum = Number(secondNum);
+let displayValSplitted = displayValue.split('');
+console.log(displayValSplitted);
 
-  console.log(`firstNum: ${firstNum}`);
-  console.log(`secondNum: ${secondNum}`);
+let number = '';
+let numberList = [];
+let operatorList = [];
 
-  if (operator === '+') {
-    return firstNum + secondNum;
-  } else if (operator === '-') {
-    return firstNum - secondNum;
-  } else if (operator === 'x') {
-    return firstNum * secondNum;
-  } else if (operator === '÷') {
-    return firstNum / secondNum;
+for(let i = 0; i < displayValSplitted.length; i++) {
+  let currentElement = displayValSplitted[i]
+  let nextElement = displayValSplitted[i+1];
+
+  if (isOperator(currentElement)) {
+    operatorList.push(currentElement);
+    continue;
+  }
+
+  if(Number(currentElement) || currentElement == '.') {
+    number += currentElement;
+    if(isNaN(nextElement) && nextElement != '.' ) {
+      numberList.push(number);
+      number = '';
+    }
   } 
 }
 
-function isMultiplicationOrDivision(operator) {
-  return (operator == 'x' || operator == '÷') ? true : false;
-}
-
-function returnWithoutMultiplicationAndDivision(numbers, operators) {
-  let sum = 0;
-  let index = 0;
-  let operatorsLength = operators.length;
-
-  for (let i = 0; i < operatorsLength; i++) {     
-    let currentOperator = operators[index];
-    let numOne = numbers[index];
-    let numTwo = numbers[index+1];
-
-    if(isMultiplicationOrDivision(operators[index])) {
-      let currentResult = 0;// If it's multiplication or Division
-      currentResult = doBasicOperation(numOne, numTwo, currentOperator);
-
-      console.log(`${numOne} ${currentOperator} ${numTwo} = ${currentResult}`);
-
-      numbers.splice(index, 2, currentResult);
-      operators.splice(index, 1);
-    } else {
-      index++;  
-    }
-  }
-
-  return [numbers, operators];
-}
-
-function calculateNumbers(numbers, operators) {
-  let sum = 0;
-
-  for (let i = 0; i < operators.length; i++) {     
-    let currentOperator = operators[i]
-
-    if (i == 0) { // if it's the first run, do operation and skip
-      sum = doBasicOperation(numbers[i], numbers[i+1], currentOperator);
-      continue;
-    }
-
-    // Otherwise...
-    sum = doBasicOperation(sum, numbers[i+1], operators[i]); 
-  }
-
-  return sum;
-}
-
-numbers = returnWithoutMultiplicationAndDivision(numberList, operatorList)[0];
-operators = returnWithoutMultiplicationAndDivision(numberList, operatorList)[1];
-console.log(numbers);
-console.log(operators);
-
-console.log(calculateNumbers(numbers, operators));
-
+console.log(numberList);
+console.log(operatorList);
