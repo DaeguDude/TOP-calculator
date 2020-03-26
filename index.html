@@ -49,19 +49,18 @@
   const closingParenthesis = document.getElementById(')');
   const allClear = document.getElementById('AC');
 
-  let numbers = [];
-  let operators = [];
+  let numberList = [];
+  let operatorList = [];
   let currentNumber = '';
 
   let displayValue = '';
 
+  // Break down the displayValue into numbers and operators
   function breakDownNumbersOperators() {
     let displayValueArray = displayValue.split('');
 
     displayValueArray.forEach((element, index, arr) => {
-      console.log(element)
-      console.log(index);
-      console.log(arr);
+ 
 
       if( isNaN(Number(element)) && element != '.' ) {
         // Not a Number or a decimal
@@ -75,21 +74,22 @@
 
       // If it's operator, add number and operator to the regarding list
       if(isOperator(element)) {
-        numbers.push(currentNumber);
-        operators.push(element);
+        currentNumber = Number(currentNumber);
+        numberList.push(currentNumber);
+        operatorList.push(element);
         currentNumber = '';
       }
 
       // If it's the end of the array, add the current number to the Numbers
       if(index === arr.length - 1) {
-        numbers.push(currentNumber);
+        currentNumber = Number(currentNumber);
+        numberList.push(currentNumber);
         currentNumber = '';
       }
     });
   }
   
-  
-
+  // Basic four operations
   function add(num1, num2) {
     return num1 + num2;
   }
@@ -106,6 +106,25 @@
     return num1 / num2;
   }
 
+  // is Operator? True or False
+  function isOperator(operator) {
+  if (
+    operator === '+'
+    || operator === '-'
+    || operator === 'x'
+    || operator === '÷'
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+  
+  // is Multiply or Divide?
+  function isMultiplyOrDivide(operator) {
+    return (operator == 'x' || operator == '÷') ? true : false;
+  }
+  
   // Takes one operator, and two numbers and then calls one of the
   // basic operation functions
   function operate(operator, num1, num2) {
@@ -124,9 +143,6 @@
   function updateDisplay() {
     display.innerHTML = displayValue;
   }
-
-
-
 
 
   // Event Listeners for all digits
@@ -174,9 +190,21 @@
 
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
-    operate();
-    
-  })
+    let sum = 0;
+
+    breakDownNumbersOperators();
+    for (let i = 0; i < operatorList.length; i++) {
+      if (i == 0) {
+        sum = operate(operatorList[i], numberList[i], numberList[i+1]);
+        continue;
+      }
+      sum = operate(operatorList[i], sum, numberList[i+1]);
+    }
+
+    displayValue = sum;
+    updateDisplay();
+
+  }) // equal.addEventListener
 
 
   

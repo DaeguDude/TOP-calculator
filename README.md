@@ -20,11 +20,11 @@ I'm sure this can be used even later for my statistics use as well.
 
 4. ~~Create the functions that populate the display when you click the number buttons… you should be storing the ‘display value’ in a variable somewhere for use in the next step.~~
 
-5. Make the calculator work! You’ll need to store the first number that is input into the calculator when a user presses an operator, and also save which operation has been chosen and then operate() on them when the user presses the “=” key.
+5. ~~Make the calculator work! You’ll need to store the first number that is input into the calculator when a user presses an operator, and also save which operation has been chosen and then operate() on them when the user presses the “=” key.~~
 
-    1. ~~You should already have the code that can populate the display~~, so once operate() has been called, update the display with the ‘solution’ to the operation.
+    1. You should already have the code that can populate the display, so once operate() has been called, update the display with the ‘solution’ to the operation.
 
-    2. ~~This is the hardest part of the project. You need to figure out how to store all the values~~ and call the operate function with them. Don’t feel bad if it takes you a while to figure out the logic.
+    2. This is the hardest part of the project. You need to figure out how to store all the values and call the operate function with them. Don’t feel bad if it takes you a while to figure out the logic.
 
 6. Gotchas: watch out for and fix these bugs if they show up in your code:
 
@@ -50,12 +50,12 @@ VARIABLES:
 
     displayValue = Storing the display value
     currentNumber = It's going to store each numbers before adding to the numbers
-    numbers = Where I store all the numbers for operation
-    operators = where I store all the operators for operation
+    numberList = Where I store all the numbers for operation
+    operatorList = where I store all the operators for operation
 
 FUNCTIONS:
 
-    breakDownNumbersOperators: It's going to break down the display Value, number to numbers, operator to operators
+    breakDownNumbersOperators: It's going to break down the display Value, number to numberList, operator to operatorList
 # These are the things I will ask once it finishes... Keep it updated throughout the project!
 
 ### What did you learn from this project?
