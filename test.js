@@ -1,4 +1,33 @@
-// How do you separate numbers and operators?
+function add(num1, num2) {
+  return num1 + num2;
+}
+
+function subtract(num1, num2) {
+  return num1 - num2;
+}
+
+function multiply(num1, num2) {
+  return num1 * num2;
+}
+
+function divide(num1, num2) {
+  return num1 / num2;
+}
+
+// Takes one operator, and two numbers and then calls one of the
+// basic operation functions
+function operate(operator, num1, num2) {
+  if (operator == '+') {
+    return add(num1, num2)
+  } else if (operator == '-') {
+    return subtract(num1, num2)
+  } else if (operator == 'x') {
+    return multiply(num1, num2)
+  } else if (operator == '÷') {
+    return divide(num1, num2)
+  }
+}
+
 function isOperator(operator) {
   if (
     operator === '+'
@@ -12,33 +41,47 @@ function isOperator(operator) {
   }
 }
 
-// Can you separate numbers from operators?
-let displayValue = '578+320x10';
+let numbers = [];
+let operators = [];
+let currentNumber = '';
 
-let displayValSplitted = displayValue.split('');
-console.log(displayValSplitted);
+let displayValue = '52.5+10-52.5x52.5x10';
+function breakDownNumbersOperators() {
+  let displayValueArray = displayValue.split('');
 
-let number = '';
-let numberList = [];
-let operatorList = [];
+  displayValueArray.forEach((element, index, arr) => {
 
-for(let i = 0; i < displayValSplitted.length; i++) {
-  let currentElement = displayValSplitted[i]
-  let nextElement = displayValSplitted[i+1];
-
-  if (isOperator(currentElement)) {
-    operatorList.push(currentElement);
-    continue;
-  }
-
-  if(Number(currentElement) || currentElement == '.') {
-    number += currentElement;
-    if(isNaN(nextElement) && nextElement != '.' ) {
-      numberList.push(number);
-      number = '';
+    if( isNaN(Number(element)) && element != '.' ) {
+      // Not a Number or a decimal
+    } else if(element == '.') {
+      // Decimal
+      currentNumber += element;
+    } else {
+      // Number
+      currentNumber += element;
     }
-  } 
+
+    // If it's operator, add number and operator to the regarding list
+    if(isOperator(element)) {
+      numbers.push(currentNumber);
+      operators.push(element);
+      currentNumber = '';
+    }
+
+    // If it's the end of the array, add the current number to the Numbers
+    if(index === arr.length - 1) {
+      numbers.push(currentNumber);
+      currentNumber = '';
+    }
+  });
 }
 
-console.log(numberList);
-console.log(operatorList);
+console.log(`before function: ${numbers}`);
+console.log(`before function: ${operators}`);
+breakDownNumbersOperators();
+console.log(`after function: ${numbers}`);
+console.log(`after function: ${operators}`);
+
+
+
+

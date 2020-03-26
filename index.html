@@ -49,139 +49,91 @@
   const closingParenthesis = document.getElementById(')');
   const allClear = document.getElementById('AC');
 
-  let displayValue = '';
-  
-  // Let's say we store the value, if one of the basic operators has been
-  // clicked.
+  let numbers = [];
+  let operators = [];
   let currentNumber = '';
-  let numberList = []; 
-  let currentOperator = '';
-  let operatorList = [];
+
+  let displayValue = '';
+
+  function breakDownNumbersOperators() {
+    let displayValueArray = displayValue.split('');
+
+    displayValueArray.forEach((element, index, arr) => {
+      console.log(element)
+      console.log(index);
+      console.log(arr);
+
+      if( isNaN(Number(element)) && element != '.' ) {
+        // Not a Number or a decimal
+      } else if(element == '.') {
+        // Decimal
+        currentNumber += element;
+      } else {
+        // Number
+        currentNumber += element;
+      }
+
+      // If it's operator, add number and operator to the regarding list
+      if(isOperator(element)) {
+        numbers.push(currentNumber);
+        operators.push(element);
+        currentNumber = '';
+      }
+
+      // If it's the end of the array, add the current number to the Numbers
+      if(index === arr.length - 1) {
+        numbers.push(currentNumber);
+        currentNumber = '';
+      }
+    });
+  }
+  
+  
+
+  function add(num1, num2) {
+    return num1 + num2;
+  }
+
+  function subtract(num1, num2) {
+    return num1 - num2;
+  }
+
+  function multiply(num1, num2) {
+    return num1 * num2;
+  }
+
+  function divide(num1, num2) {
+    return num1 / num2;
+  }
+
+  // Takes one operator, and two numbers and then calls one of the
+  // basic operation functions
+  function operate(operator, num1, num2) {
+    if (operator == '+') {
+      return add(num1, num2)
+    } else if (operator == '-') {
+      return subtract(num1, num2)
+    } else if (operator == 'x') {
+      return multiply(num1, num2)
+    } else if (operator == '÷') {
+      return divide(num1, num2)
+    }
+}
 
   // Displays the value and operators that has been clicked.
-  function populateDisplay() {
+  function updateDisplay() {
     display.innerHTML = displayValue;
   }
 
 
 
-  function doBasicOperation(firstNum, secondNum, operator) {
-   
-    if (operator === '+') {
-      return firstNum + secondNum;
-    } else if (operator === '-') {
-      return firstNum - secondNum;
-    } else if (operator === 'x') {
-      return firstNum * secondNum;
-    } else if (operator === '÷') {
-      return firstNum / secondNum;
-    } 
-  }
 
-  function extractNumbers(array1) {
-    return array1.filter(str1 => isNaN(str1) == false) 
-  }
-
-  function putNumbersIntoTheList(array1) {
-    inputList = extractNumbers(array1);
-  }
-
-// DONE
-// Check for if it's one of the basic operators
-  function isOperator(operator) {
-    if (
-      operator === '+'
-      || operator === '-'
-      || operator === 'x'
-      || operator === '÷'
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  function isMultiplicationOrDivision(operator) {
-    return (operator == 'x' || operator == '÷') ? true : false;
-  }
-
-  // It takes number List and operator List, and return
-  // numbers List calculated regarding to the multiplications and 
-  // Divisions, and return operators without any multiplications and
-  // Divisions.
-  function returnWithoutMultiplicationAndDivision(numbers, operators) {
-    let sum = 0;
-    let index = 0;
-    let operatorsLength = operators.length;
-
-    for (let i = 0; i < operatorsLength; i++) {     
-      let currentOperator = operators[index];
-      let numOne = numbers[index];
-      let numTwo = numbers[index+1];
-
-      if(isMultiplicationOrDivision(operators[index])) {
-        let currentResult = 0;// If it's multiplication or Division
-        currentResult = doBasicOperation(numOne, numTwo, currentOperator);
-
-        console.log(`${numOne} ${currentOperator} ${numTwo} = ${currentResult}`);
-
-        numbers.splice(index, 2, currentResult);
-        operators.splice(index, 1);
-      } else {
-        index++;  
-      }
-    }
-  return [numbers, operators];
-}
-  
-  // It takes number & operator Lists without multiplications and divisions
-  // and return the sum after operating all the operations on the numbers
-  // regarding to operators.
-  function calculateNumbers(numbers, operators) {
-    let sum = 0;
-
-    for (let i = 0; i < operators.length; i++) {     
-      let currentOperator = operators[i]
-
-      if (i == 0) { // if it's the first run, do operation and skip
-        sum = doBasicOperation(numbers[i], numbers[i+1], currentOperator);
-        continue;
-      }
-
-      // Otherwise...
-      sum = doBasicOperation(sum, numbers[i+1], operators[i]); 
-    }
-
-    console.log(`sum in calculatedNumbers function: ${sum}`);
-    return sum;
-  }
-
-  // Now it's time to read display Value
-  function operate() {
-    let sum = 0;
-
-    let displayValueSplitted = displayValue.split('');
-    console.log(displayValueSplitted);
-    
-    
-    numbers = returnWithoutMultiplicationAndDivision(numbers, operators)[0];
-    operators = returnWithoutMultiplicationAndDivision(numbers, operators)[1];
-    
-    // so...if there's nothing left in the operator...it's done
-    if (operators.length == 0) {
-      sum = numbers[0];
-    } else { // if there's some operators left in the operator
-      sum = calculateNumbers(numbers, operators);
-    }
-    
-    display.innerHTML = sum;
-  }
 
   // Event Listeners for all digits
   digits.forEach(digit => {
     digit.addEventListener('click', event => {
       displayValue += event.target.getAttribute("data-numbers");
-      populateDisplay();
+      updateDisplay();
     })
   })
   
@@ -189,35 +141,35 @@
   operators.forEach(operator => {
     operator.addEventListener('click', event => {
       displayValue += event.target.getAttribute("data-operator");
-      populateDisplay();
+      updateDisplay();
     })
   })
 
   openingParenthesis.addEventListener('click', event => {
     displayValue += '(';
-    populateDisplay();
+    updateDisplay();
   })
 
   closingParenthesis.addEventListener('click', event => {
     displayValue += ')';
-    populateDisplay();
+    updateDisplay();
   })
 
   decimal.addEventListener('click', event => {
     displayValue += '.';
-    populateDisplay();
+    updateDisplay();
   })
 
   del.addEventListener('click', event => {
     let splittedDisplayValue = displayValue.split('');
     splittedDisplayValue.pop();
     displayValue = splittedDisplayValue.join('');
-    populateDisplay();
+    updateDisplay();
   })
 
   allClear.addEventListener('click', event => {
     displayValue = '';
-    populateDisplay();
+    updateDisplay();
   })
 
   // If equal is clicked, calculate the all the numbers regarding the operators
