@@ -56,3 +56,8 @@ VARIABLES:
 FUNCTIONS:
 
     breakDownNumbersOperators: It's going to break down the display Value, number to numbers, operator to operators
+# These are the things I will ask once it finishes... Keep it updated throughout the project!
+
+### What did you learn from this project?
+
+### What did you do to solve the problem?
