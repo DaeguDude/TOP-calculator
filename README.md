@@ -28,7 +28,7 @@ I'm sure this can be used even later for my statistics use as well.
 
 6. Gotchas: watch out for and fix these bugs if they show up in your code:
 
-    1. Users should be able to string together several operations and get the right answer: 12 + 7 - 5 * 3 etc. The behavior we’re looking for should be something like this https://www.online-calculator.com/.
+    ~~1. Users should be able to string together several operations and get the right answer: 12 + 7 - 5 * 3 etc. The behavior we’re looking for should be something like this https://www.online-calculator.com/.~~
 
     2. You should round answers with long decimals so that they don’t overflow the screen.
 
@@ -60,4 +60,26 @@ FUNCTIONS:
 
 ### What did you learn from this project?
 
+- Javascript always uses pass-by-value, however, when the data type is not one
+of the argument is not a primitive type then the value passed is actually the
+memory location(pass-by-reference). 5 primitive types(strings, numbers, booleans
+, null, and undefined). Here's the [link](https://medium.com/@TK_CodeBear/javascript-arrays-pass-by-value-and-thinking-about-memory-fffb7b0bf43) for explanation
+
+- [How to do decimal maths in javascript](https://www.youtube.com/watch?v=wETgMr6QMIE)
+
+- [javascript module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+
+
 ### What did you do to solve the problem?
+
+
+
+<!-- Where to start??? -->
+<!-- START FROM 6.2 -->
+<!--
+How will you handle decimals in this calculator?
+
+If you find decimals....(isInteger, isFloat)
+use Big library
+
+-->

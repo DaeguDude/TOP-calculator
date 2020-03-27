@@ -115,7 +115,7 @@ function calculateMultiplyAndDivision(numbers, operators) {
 
 // If equal is clicked...
 breakDownNumbersOperators();
-console.log(calculateMultiplyAndDivision(numberList.slice(0), operatorList.slice(0)));
+calculateMultiplyAndDivision(numberList, operatorList);
  
 
   

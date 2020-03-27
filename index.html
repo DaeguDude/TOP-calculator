@@ -37,6 +37,7 @@
 
   </div>
 </body>
+<script src="big.js/big.min.js"></script>
 <script>
   const calculatorBody = document.getElementById('calculator-body');
   const digits = document.querySelectorAll('button[data-numbers]');
@@ -58,6 +59,8 @@
   // Break down the displayValue into numbers and operators
   function breakDownNumbersOperators() {
     let displayValueArray = displayValue.split('');
+    numberList = [];
+    operatorList = [];
 
     displayValueArray.forEach((element, index, arr) => {
  
@@ -144,6 +147,32 @@
     display.innerHTML = displayValue;
   }
 
+  function calculateMultiplyAndDivision(numbers, operators) {
+  let index = 0;
+  let result = 0;
+  let currentOperator = '';
+  let operatorsLength = operators.length;
+
+  for (let i = 0; i < operatorsLength; i++) {
+    result = 0;
+    
+    currentOperator = operators[index];
+    
+    if (isMultiplyOrDivide(currentOperator)) {
+      
+      result = operate(currentOperator, numbers[index], numbers[index+1]);
+      numbers.splice(index, 2, result);
+      operators.splice(index, 1);
+    } else {
+      // index is incrased, because the operator wasn't 'x' or '/', so that
+      // we need to move on to the next element
+      index++;
+    }
+  }
+
+  return [numbers, operators];
+}
+
 
   // Event Listeners for all digits
   digits.forEach(digit => {
@@ -193,13 +222,24 @@
     let sum = 0;
 
     breakDownNumbersOperators();
-    for (let i = 0; i < operatorList.length; i++) {
-      if (i == 0) {
-        sum = operate(operatorList[i], numberList[i], numberList[i+1]);
-        continue;
+    calculateMultiplyAndDivision(numberList, operatorList);
+
+    // If there's no operator left in the operatorList
+    if (operatorList.length == 0) {
+      sum = numberList[0];
+    } else { // If there's some +, - left in the operatorList
+      for(let i = 0; i < operatorList.length; i++) {
+        if (i == 0) {
+          sum = operate(operatorList[i], numberList[i], numberList[i+1]);
+          continue;
+        }
+
+        sum = operate(operatorList[i], sum, numberList[i+1]);
       }
-      sum = operate(operatorList[i], sum, numberList[i+1]);
     }
+
+    
+    
 
     displayValue = sum;
     updateDisplay();
@@ -207,7 +247,7 @@
   }) // equal.addEventListener
 
 
-  
+
 
 </script>
 
