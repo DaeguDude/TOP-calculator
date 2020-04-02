@@ -273,8 +273,13 @@
   
   // Event Listeners for four basic operators
   operators.forEach(operator => {
+    // let displayValueArray = displayValue.split('');
+    // let lastElement = displayValueArray[displayValueArray.length -1];
+    
     operator.addEventListener('click', event => {
+      // Check if your last value is operator
       displayValue += event.target.getAttribute("data-operator");
+      console.log(displayValue);
       updateDisplay();
     })
   })
