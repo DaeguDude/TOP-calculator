@@ -109,6 +109,15 @@
     return num1 / num2;
   }
 
+  // is Decimal? True or False
+  function isDecimal(num1) {
+  if (num1 % 1 != 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
   // is Operator? True or False
   function isOperator(operator) {
   if (
@@ -123,7 +132,7 @@
   }
 }
   
-  // is Multiply or Divide?
+  // is Multiply or Divide? True or False
   function isMultiplyOrDivide(operator) {
     return (operator == 'x' || operator == '÷') ? true : false;
   }
@@ -142,25 +151,63 @@
     }
   }
 
+  // As same as the function 'operate', except this does operation for decimal
+  function decimalOperate(operator, num1, num2) {
+  let sum = 0
+  if (operator == '+') {
+    num1 = new Big(num1);
+    sum = num1.plus(num2)
+    return Number(sum.valueOf())
+  } 
+  else if (operator == '-') {
+    num1 = new Big(num1);
+    sum = num1.minus(num2)
+    return Number(sum.valueOf())
+  } 
+  else if (operator == 'x') {
+    num1 = new Big(num1);
+    sum = num1.times(num2)
+    return Number(sum.valueOf())
+  } 
+  else if (operator == '÷') {
+    num1 = new Big(num1);
+    sum = num1.div(num2)
+    return Number(sum.valueOf())
+  }
+}
+  
   // Displays the value and operators that has been clicked.
   function updateDisplay() {
     display.innerHTML = displayValue;
   }
 
+  // Calculate multiplications and divisions first.
+  // This will calculate numbers that has to be calculated
+  // with multiplications and divisions only. add and subtraction
+  // will be left
+  // Returns nothing, just edit numberlist and operatorlist
   function calculateMultiplyAndDivision(numbers, operators) {
   let index = 0;
   let result = 0;
   let currentOperator = '';
+  let firstNum = 0;
+  let secondNum = 0;
   let operatorsLength = operators.length;
 
   for (let i = 0; i < operatorsLength; i++) {
     result = 0;
     
     currentOperator = operators[index];
+    firstNum = numbers[index];
+    secondNum = numbers[index+1];
+
     
     if (isMultiplyOrDivide(currentOperator)) {
-      
-      result = operate(currentOperator, numbers[index], numbers[index+1]);
+      if (isDecimal(firstNum) || isDecimal(secondNum)) {
+        result = decimalOperate(currentOperator, firstNum, secondNum);
+      } else {
+        result = operate(currentOperator, firstNum, secondNum);
+      }
       numbers.splice(index, 2, result);
       operators.splice(index, 1);
     } else {
@@ -170,9 +217,42 @@
     }
   }
 
-  return [numbers, operators];
+  // return [numbers, operators];
 }
 
+  // Calculate additions and subtractions. Returns sum
+  function calculateAdditionAndSubtraction(numbers, operators) {
+  // If there's some +, - left in the operatorList
+    let firstNum = 0;
+    let secondNum = 0;
+    let sum = 0;
+    let currentOperator = '';
+
+    for(let i = 0; i < operatorList.length; i++) {
+      firstNum = numbers[i];
+      secondNum = numbers[i+1];
+      currentOperator = operatorList[i];
+
+      // For the first operation
+      if (i == 0) {
+        if(isDecimal(firstNum) || isDecimal(secondNum)) {
+          sum = decimalOperate(currentOperator, firstNum, secondNum);  
+        } else {
+          sum = operate(currentOperator, firstNum, secondNum);
+        }
+        continue;
+      }
+
+      // Since the second operation
+      if(isDecimal(firstNum) || isDecimal(secondNum)) {
+        sum = decimalOperate(currentOperator, sum, secondNum);
+      } else {
+        sum = operate(currentOperator, sum, secondNum);
+      }
+    }
+
+    return sum;
+  }
 
   // Event Listeners for all digits
   digits.forEach(digit => {
@@ -228,14 +308,7 @@
     if (operatorList.length == 0) {
       sum = numberList[0];
     } else { // If there's some +, - left in the operatorList
-      for(let i = 0; i < operatorList.length; i++) {
-        if (i == 0) {
-          sum = operate(operatorList[i], numberList[i], numberList[i+1]);
-          continue;
-        }
-
-        sum = operate(operatorList[i], sum, numberList[i+1]);
-      }
+      sum = calculateAdditionAndSubtraction(numberList, operatorList);
     }
 
     
