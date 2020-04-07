@@ -52,50 +52,13 @@
 
   let numberList = [];
   let operatorList = [];
-  let currentNumber = '';
+  // let currentNumber = '';
 
   let displayValue = '0';
   updateDisplay();
 
-  // Break down the displayValue into numbers and operators
-  function breakDownNumbersOperators() {
-    if (displayValue.length == 0) {
-      // There's nothing on the display
-    } else {
-      let displayValueArray = displayValue.split('');
-      numberList = [];
-      operatorList = [];
-
-      displayValueArray.forEach((element, index, arr) => {
-  
-
-        if( isNaN(Number(element)) && element != '.' ) {
-          // Not a Number or a decimal
-        } else if(element == '.') {
-          // Decimal
-          currentNumber += element;
-        } else {
-          // Number
-          currentNumber += element;
-        }
-
-        // If it's operator, add number and operator to the regarding list
-        if(isOperator(element)) {
-          currentNumber = Number(currentNumber);
-          numberList.push(currentNumber);
-          operatorList.push(element);
-          currentNumber = '';
-        }
-
-        // If it's the end of the array, add the current number to the Numbers
-        if(index === arr.length - 1) {
-          currentNumber = Number(currentNumber);
-          numberList.push(currentNumber);
-          currentNumber = '';
-        }
-      });
-    } // else
-  } // breakDownNumbersOperators()
+  // Takes an displayValue and returns numberList and operatorList out of
+  // the displayValue
   
   // Basic four operations
   function add(num1, num2) {
@@ -158,84 +121,131 @@
 
   // As same as the function 'operate', except this does operation for decimal
   function decimalOperate(operator, num1, num2) {
-  let sum = 0
-  if (operator == '+') {
-    num1 = new Big(num1);
-    sum = num1.plus(num2)
-    return Number(sum.valueOf())
-  } 
-  else if (operator == '-') {
-    num1 = new Big(num1);
-    sum = num1.minus(num2)
-    return Number(sum.valueOf())
-  } 
-  else if (operator == 'x') {
-    num1 = new Big(num1);
-    sum = num1.times(num2)
-    return Number(sum.valueOf())
-  } 
-  else if (operator == '÷') {
-    num1 = new Big(num1);
-    sum = num1.div(num2)
-    return Number(sum.valueOf())
+    let sum = 0
+    if (operator == '+') {
+      num1 = new Big(num1);
+      sum = num1.plus(num2)
+      return Number(sum.valueOf())
+    } 
+    else if (operator == '-') {
+      num1 = new Big(num1);
+      sum = num1.minus(num2)
+      return Number(sum.valueOf())
+    } 
+    else if (operator == 'x') {
+      num1 = new Big(num1);
+      sum = num1.times(num2)
+      return Number(sum.valueOf())
+    } 
+    else if (operator == '÷') {
+      num1 = new Big(num1);
+      sum = num1.div(num2)
+      return Number(sum.valueOf())
+    }
   }
-}
   
-  // Displays the value and operators that has been clicked.
-  function updateDisplay() {
-    display.innerHTML = displayValue;
-  }
+  function returnNumbersAndOperators(displayValue) {
+  if (displayValue.length == 0) {
+    return displayValue; // return as is
+  } else {
+    let displayValueArray = displayValue.split('');
+    let currentNumber = 0;
+    let numberList = [];
+    let operatorList = [];
 
+    displayValueArray.forEach((element, index, arr) => {
+
+
+      if( isNaN(Number(element)) && element != '.' ) {
+        // Not a Number or a decimal
+      } else if(element == '.') {
+        // Decimal
+        currentNumber += element;
+      } else {
+        // Number
+        currentNumber += element;
+      }
+
+      // If it's operator, add number and operator to the regarding list
+      if(isOperator(element)) {
+        currentNumber = Number(currentNumber);
+        numberList.push(currentNumber);
+        operatorList.push(element);
+        currentNumber = '';
+      }
+
+      // If it's the end of the array, add the current number to the Numbers
+      if(index === arr.length - 1) {
+        currentNumber = Number(currentNumber);
+        numberList.push(currentNumber);
+        currentNumber = '';
+      }
+    });
+    return {
+      numberList: numberList,
+      operatorList: operatorList,
+    };
+  } 
+} 
+  
   // Calculate multiplications and divisions first.
   // This will calculate numbers that has to be calculated
   // with multiplications and divisions only. add and subtraction
   // will be left
   // Returns nothing, just edit numberlist and operatorlist
-  function calculateMultiplyAndDivision(numbers, operators) {
-  let index = 0;
-  let result = 0;
-  let currentOperator = '';
-  let firstNum = 0;
-  let secondNum = 0;
-  let operatorsLength = operators.length;
-
-  for (let i = 0; i < operatorsLength; i++) {
-    result = 0;
+  function calculateMultiplyAndDivision(numberList, operatorList) {
+    numberList = Array.from(numberList);
+    operatorList = Array.from(operatorList);
     
-    currentOperator = operators[index];
-    firstNum = numbers[index];
-    secondNum = numbers[index+1];
+    let index = 0;
+    let result = 0;
+    let currentOperator = '';
+    let firstNum = 0;
+    let secondNum = 0;
+    let operatorListLength = operatorList.length;
 
-    
-    if (isMultiplyOrDivide(currentOperator)) {
-      if (isDecimal(firstNum) || isDecimal(secondNum)) {
-        result = decimalOperate(currentOperator, firstNum, secondNum);
+    for (let i = 0; i < operatorListLength; i++) {
+      result = 0;
+      
+      currentOperator = operatorList[index];
+      firstNum = numberList[index];
+      secondNum = numberList[index+1];
+
+      
+      if (isMultiplyOrDivide(currentOperator)) {
+        if (isDecimal(firstNum) || isDecimal(secondNum)) {
+          result = decimalOperate(currentOperator, firstNum, secondNum);
+        } else {
+          result = operate(currentOperator, firstNum, secondNum);
+        }
+        numberList.splice(index, 2, result);
+        operatorList.splice(index, 1);
       } else {
-        result = operate(currentOperator, firstNum, secondNum);
+        // index is incrased, because the operator wasn't 'x' or '/', so that
+        // we need to move on to the next element
+        index++;
       }
-      numbers.splice(index, 2, result);
-      operators.splice(index, 1);
-    } else {
-      // index is incrased, because the operator wasn't 'x' or '/', so that
-      // we need to move on to the next element
-      index++;
     }
+
+    return {
+      numberList: numberList,
+      operatorList: operatorList
+    };
   }
 
-  // return [numbers, operators];
-}
-
   // Calculate additions and subtractions. Returns sum
-  function calculateAdditionAndSubtraction(numbers, operators) {
+  function calculateAdditionAndSubtraction(numberList, operatorList) {
   // If there's some +, - left in the operatorList
+    
+
     let firstNum = 0;
     let secondNum = 0;
     let sum = 0;
     let currentOperator = '';
 
     for(let i = 0; i < operatorList.length; i++) {
-      firstNum = numbers[i];
-      secondNum = numbers[i+1];
+      firstNum = numberList[i];
+      secondNum = numberList[i+1];
       currentOperator = operatorList[i];
 
       // For the first operation
@@ -258,6 +268,12 @@
 
     return sum;
   }
+
+  // Displays the value and operators that has been clicked.
+  function updateDisplay() {
+    display.innerHTML = displayValue;
+  }
+
 
   // Event Listeners for all digits
   digits.forEach(digit => {
@@ -317,36 +333,11 @@
     // I need to check if there's anything in the numberList or operatorList
    
 
-    breakDownNumbersOperators();
-    
-    updateDisplay();
-
-    
-    // if (numberList.length == 0) { // if there's no number
-    //   displayValue = sum
-    //   updateDisplay();
-    // } else { // When numberList is not empty
-    //   calculateMultiplyAndDivision(numberList, operatorList);
-    // }
-    
-    // calculateMultiplyAndDivision(numberList, operatorList);
-
-    // // If there's no operator left in the operatorList
-    // if (operatorList.length == 0) {
-    //   sum = numberList[0];
-    // } else { // If there's some +, - left in the operatorList
-    //   calculateAdditionAndSubtraction(numberList, operatorList);
-    //   displayValue = sum;
-    //   updateDisplay();
-    // }
-
-
-
-    
-    
-
-    // displayValue = sum;
-    // updateDisplay();
+    let values = returnNumbersAndOperators(displayValue);
+    numberList = values.numberList;
+    operatorList = values.operatorList;
+    console.log(numberList);
+    console.log(operatorList);
 
   }) // equal.addEventListener
 
