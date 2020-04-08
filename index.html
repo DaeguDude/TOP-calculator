@@ -50,12 +50,8 @@
   const closingParenthesis = document.getElementById(')');
   const allClear = document.getElementById('AC');
 
-  let numberList = [];
-  let operatorList = [];
-  // let currentNumber = '';
-
   let displayValue = '0';
-  updateDisplay();
+  updateDisplay(displayValue);
 
   // Takes an displayValue and returns numberList and operatorList out of
   // the displayValue
@@ -154,16 +150,12 @@
     let operatorList = [];
 
     displayValueArray.forEach((element, index, arr) => {
-
-
-      if( isNaN(Number(element)) && element != '.' ) {
-        // Not a Number or a decimal
-      } else if(element == '.') {
-        // Decimal
-        currentNumber += element;
-      } else {
-        // Number
-        currentNumber += element;
+      
+      // if it's a number or a decimal, add to the currentNumber
+      if (Number(element)) {
+        currentNumber += Number(element);
+      } else if(element === '.') {
+        currentNumber += element
       }
 
       // If it's operator, add number and operator to the regarding list
@@ -171,16 +163,18 @@
         currentNumber = Number(currentNumber);
         numberList.push(currentNumber);
         operatorList.push(element);
-        currentNumber = '';
+        currentNumber = 0;
+        return;
       }
 
       // If it's the end of the array, add the current number to the Numbers
       if(index === arr.length - 1) {
         currentNumber = Number(currentNumber);
         numberList.push(currentNumber);
-        currentNumber = '';
+        currentNumber = 0;
       }
     });
+
     return {
       numberList: numberList,
       operatorList: operatorList,
@@ -235,9 +229,7 @@
 
   // Calculate additions and subtractions. Returns sum
   function calculateAdditionAndSubtraction(numberList, operatorList) {
-  // If there's some +, - left in the operatorList
-    
-
+    // If there's some +, - left in the operatorList
     let firstNum = 0;
     let secondNum = 0;
     let sum = 0;
@@ -270,8 +262,13 @@
   }
 
   // Displays the value and operators that has been clicked.
-  function updateDisplay() {
+  function updateDisplay(displayValue) {
     display.innerHTML = displayValue;
+  }
+
+  // Returns the display Value
+  function returnDisplay() {
+    return display.innerHTML
   }
 
 
@@ -283,7 +280,7 @@
       } else {
         displayValue += event.target.getAttribute("data-numbers");
       }
-      updateDisplay();
+      updateDisplay(displayValue);
     })
   })
   
@@ -295,50 +292,69 @@
     operator.addEventListener('click', event => {
       // Check if your last value is operator
       displayValue += event.target.getAttribute("data-operator");
-      console.log(displayValue);
-      updateDisplay();
+      updateDisplay(displayValue);
     })
   })
 
   openingParenthesis.addEventListener('click', event => {
     displayValue += '(';
-    updateDisplay();
+    updateDisplay(displayValue);
   })
 
   closingParenthesis.addEventListener('click', event => {
     displayValue += ')';
-    updateDisplay();
+    updateDisplay(displayValue);
   })
 
   decimal.addEventListener('click', event => {
     displayValue += '.';
-    updateDisplay();
+    updateDisplay(displayValue);
   })
 
   del.addEventListener('click', event => {
     let splittedDisplayValue = displayValue.split('');
     splittedDisplayValue.pop();
     displayValue = splittedDisplayValue.join('');
-    updateDisplay();
+    updateDisplay(displayValue);
   })
 
   allClear.addEventListener('click', event => {
-    displayValue = '';
-    updateDisplay();
+    displayValue = '0';
+    updateDisplay(displayValue);
   })
 
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
     let sum = 0;
-    // I need to check if there's anything in the numberList or operatorList
-   
+    let numberList = [];
+    let operatorList = [];
 
-    let values = returnNumbersAndOperators(displayValue);
-    numberList = values.numberList;
-    operatorList = values.operatorList;
+    console.log(`displayValue: ${displayValue}`);
+
+    let numAndOper = returnNumbersAndOperators(displayValue);
+    numberList = numAndOper.numberList;
+    operatorList = numAndOper.operatorList;
     console.log(numberList);
     console.log(operatorList);
+    
+    numAndOper = calculateMultiplyAndDivision(numberList, operatorList)
+    numberList = numAndOper.numberList;
+    operatorList = numAndOper.operatorList;
+    
+    if (operatorList.length != 0) { // When there's nothing left in the list
+      sum = calculateAdditionAndSubtraction(numberList, operatorList)
+      updateDisplay(sum);
+    } else { // There's +, - left in the operatorList
+      sum = numberList[0];
+      updateDisplay(sum);
+    }
+    
+    
 
+   
+    
+   
+   
   }) // equal.addEventListener
 
   
