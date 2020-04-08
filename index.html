@@ -334,20 +334,33 @@
     let numAndOper = returnNumbersAndOperators(displayValue);
     numberList = numAndOper.numberList;
     operatorList = numAndOper.operatorList;
+    console.log('After returnNumbersAndOperators');
     console.log(numberList);
     console.log(operatorList);
-    
-    numAndOper = calculateMultiplyAndDivision(numberList, operatorList)
-    numberList = numAndOper.numberList;
-    operatorList = numAndOper.operatorList;
-    
-    if (operatorList.length != 0) { // When there's nothing left in the list
-      sum = calculateAdditionAndSubtraction(numberList, operatorList)
-      updateDisplay(sum);
-    } else { // There's +, - left in the operatorList
-      sum = numberList[0];
-      updateDisplay(sum);
+
+    console.log(numberList.length)
+    console.log(operatorList.length)
+
+    // When numberList and operatorList don't have the same length, it should
+    // run, ex) numberList = [3], operatorList['+']. You can't do operation
+    if (numberList.length != operatorList.length) {
+      numAndOper = calculateMultiplyAndDivision(numberList, operatorList)
+      numberList = numAndOper.numberList;
+      operatorList = numAndOper.operatorList;
+
+      if (operatorList.length != 0) { // When there's nothing left in the list
+        sum = calculateAdditionAndSubtraction(numberList, operatorList)
+        updateDisplay(sum);
+      } else { // There's +, - left in the operatorList
+        sum = numberList[0];
+        updateDisplay(sum);
+      }
+    } else {
+      updateDisplay(displayValue);
     }
+    
+    
+    
     
     
 
