@@ -39,7 +39,7 @@ function isNumber(number) {
   }
 }
 
-function operate(values) {
+function infixToPostfix(values) {
 
   let result = '';
   let stack = [];
@@ -47,41 +47,53 @@ function operate(values) {
   let splittedValues = values.split('');
 
   splittedValues.forEach((element, index, arr) => {
-    // If it's operand, just add to the result
+    // 1. if operand, add to the notation
     if (Number(element)) {
       result += element;
     } 
     
-    // If it's operator, check if stack is empty and if it is push to the stack
-    // If it's not empty, you need to check if last operator in the stack, check
-    // if last operator is equal to or greater than current operator. If they
-    // are pop the last operator and add to the result, and push the current
-    // operator to the stack
+    // 2. If operator,
     if (isOperator(element)) {
-      if(stack.length === 0) { // stack empty
+      // 2.a if stack is empty, just push to the stack
+      if(stack.length === 0) { 
         stack.push(element);
-      } else { // stack not empty
-        let lastOperator = stack.pop();
+      } else { // 2.b if stack is not empty
+        let lastOperator = stack[stack.length - 1];
         let currentOperator = element;
-
-        // Add to check what operator is greater
+        // 2.b.i last operator in stack is equal or bigger than the current
+        // operator - pop the last operator from stack, and add to the notation,
+        // and push current operator to the stack
+        if(isLastOperatorEqualOrBigger(lastOperator, currentOperator)) {
+          lastOperator = stack.pop();
+          result += lastOperator;
+          stack.push(currentOperator);
+        } else {
+          // 2.b.ii last operator in stack is less than current operator, push
+          // current operator to the notation
+          stack.push(currentOperator);
+        }
       }
-      
-    }
+    } // isOperator
 
-    // If it's last element, add it to the result. Last element
-    // comes first
+    // 3. if infix notation ends..
     if(index === arr.length - 1) {
       stackLength = stack.length
       for (let i = 0; i < stackLength; i++) {
         result += stack.pop()
       }
-    }
-  })
-}
+    } // last element
+  }) // forEach
 
-operate('4-5');
 
+  console.log(result)
+  console.log(stack);
+} // operate
+
+// ÷
+// 2 + 4 x 5 = 245x+
+// 2 ÷ 2 x 5 = 
+infixToPostfix('2+45');
+infixToPostfix('2÷2x5');
 
 
 
