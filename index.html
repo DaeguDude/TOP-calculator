@@ -53,36 +53,34 @@
   let displayValue = '0';
   updateDisplay(displayValue);
 
-  // Takes an displayValue and returns numberList and operatorList out of
-  // the displayValue
-  
-  // Basic four operations
   function add(num1, num2) {
-    return num1 + num2;
-  }
+  return num1 + num2;
+}
 
   function subtract(num1, num2) {
-    return num1 - num2;
-  }
+  return num1 - num2;
+}
 
   function multiply(num1, num2) {
-    return num1 * num2;
-  }
+  return num1 * num2;
+}
 
   function divide(num1, num2) {
-    return num1 / num2;
-  }
+  return num1 / num2;
+}
 
-  // is Decimal? True or False
-  function isDecimal(num1) {
-  if (num1 % 1 != 0) {
-    return true
-  } else {
-    return false
+  function operate(operator, num1, num2) {
+  if (operator == '+') {
+    return add(num1, num2)
+  } else if (operator == '-') {
+    return subtract(num1, num2)
+  } else if (operator == 'x') {
+    return multiply(num1, num2)
+  } else if (operator == '÷') {
+    return divide(num1, num2)
   }
 }
 
-  // is Operator? True or False
   function isOperator(operator) {
   if (
     operator === '+'
@@ -95,171 +93,131 @@
     return false;
   }
 }
-  
-  // is Multiply or Divide? True or False
-  function isMultiplyOrDivide(operator) {
-    return (operator == 'x' || operator == '÷') ? true : false;
-  }
-  
-  // Takes one operator, and two numbers and then calls one of the
-  // basic operation functions
-  function operate(operator, num1, num2) {
-    if (operator == '+') {
-      return add(num1, num2)
-    } else if (operator == '-') {
-      return subtract(num1, num2)
-    } else if (operator == 'x') {
-      return multiply(num1, num2)
-    } else if (operator == '÷') {
-      return divide(num1, num2)
-    }
-  }
 
-  // As same as the function 'operate', except this does operation for decimal
-  function decimalOperate(operator, num1, num2) {
-    let sum = 0
-    if (operator == '+') {
-      num1 = new Big(num1);
-      sum = num1.plus(num2)
-      return Number(sum.valueOf())
-    } 
-    else if (operator == '-') {
-      num1 = new Big(num1);
-      sum = num1.minus(num2)
-      return Number(sum.valueOf())
-    } 
-    else if (operator == 'x') {
-      num1 = new Big(num1);
-      sum = num1.times(num2)
-      return Number(sum.valueOf())
-    } 
-    else if (operator == '÷') {
-      num1 = new Big(num1);
-      sum = num1.div(num2)
-      return Number(sum.valueOf())
-    }
-  }
-  
-  function returnNumbersAndOperators(displayValue) {
-  if (displayValue.length == 0) {
-    return displayValue; // return as is
+  function isParenthesis(operator) {
+  if (operator === '(' || operator == ')') {
+    return true;
   } else {
-    let displayValueArray = displayValue.split('');
-    let currentNumber = 0;
-    let numberList = [];
-    let operatorList = [];
+    return false;
+  }
+}
 
-    displayValueArray.forEach((element, index, arr) => {
-      
-      // if it's a number or a decimal, add to the currentNumber
-      if (Number(element)) {
-        currentNumber += Number(element);
-      } else if(element === '.') {
-        currentNumber += element
-      }
+  function isLastOperatorEqualOrBigger(last, cur) {
+  // if last operator is Equal or bigger, true
+  // if last operator is less, false
 
-      // If it's operator, add number and operator to the regarding list
-      if(isOperator(element)) {
-        currentNumber = Number(currentNumber);
-        numberList.push(currentNumber);
-        operatorList.push(element);
-        currentNumber = 0;
-        return;
-      }
-
-      // If it's the end of the array, add the current number to the Numbers
-      if(index === arr.length - 1) {
-        currentNumber = Number(currentNumber);
-        numberList.push(currentNumber);
-        currentNumber = 0;
-      }
-    });
-
-    return {
-      numberList: numberList,
-      operatorList: operatorList,
-    };
-  } 
-} 
+  // if last operator is '(', last operator is less
+  if (last === '(') {
+    return false;
+  }
   
-  // Calculate multiplications and divisions first.
-  // This will calculate numbers that has to be calculated
-  // with multiplications and divisions only. add and subtraction
-  // will be left
-  // Returns nothing, just edit numberlist and operatorlist
-  function calculateMultiplyAndDivision(numberList, operatorList) {
-    numberList = Array.from(numberList);
-    operatorList = Array.from(operatorList);
+  if (cur === last) {
+    return true;
+  }
+
+  if (cur === '+' || cur === '-') {
+    return true;
+  } else {
+    if (last === 'x' || last === '÷') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+  function infixToPostfix(values) {
+
+  let result = '';
+  let stack = [];
+
+  let splittedValues = values.split('');
+
+  splittedValues.forEach((element, index, arr) => {
+    // 1. if operand, add to the notation
+    if (Number(element)) {
+      result += element;
+    } 
     
-    let index = 0;
-    let result = 0;
-    let currentOperator = '';
-    let firstNum = 0;
-    let secondNum = 0;
-    let operatorListLength = operatorList.length;
-
-    for (let i = 0; i < operatorListLength; i++) {
-      result = 0;
-      
-      currentOperator = operatorList[index];
-      firstNum = numberList[index];
-      secondNum = numberList[index+1];
-
-      
-      if (isMultiplyOrDivide(currentOperator)) {
-        if (isDecimal(firstNum) || isDecimal(secondNum)) {
-          result = decimalOperate(currentOperator, firstNum, secondNum);
+    // 2-1. If operator,
+    if (isOperator(element)) {
+      // 2.a if stack is empty, just push to the stack
+      if(stack.length === 0) { 
+        stack.push(element);
+      } else { // 2.b if stack is not empty
+        let lastOperator = stack[stack.length - 1];
+        let currentOperator = element;
+        // 2.b.i last operator in stack is equal or bigger than the current
+        // operator - pop the last operator from stack, and add to the notation,
+        // and push current operator to the stack
+        if(isLastOperatorEqualOrBigger(lastOperator, currentOperator)) {
+          lastOperator = stack.pop();
+          result += lastOperator;
+          stack.push(currentOperator);
         } else {
-          result = operate(currentOperator, firstNum, secondNum);
+          // 2.b.ii last operator in stack is less than current operator, push
+          // current operator to the notation
+          stack.push(currentOperator);
         }
-        numberList.splice(index, 2, result);
-        operatorList.splice(index, 1);
-      } else {
-        // index is incrased, because the operator wasn't 'x' or '/', so that
-        // we need to move on to the next element
-        index++;
+      }
+    } // isOperator
+
+    // 2-2 if parenthesis 
+    if (isParenthesis(element)) {
+      if(element === '(') {
+        stack.push(element);
+      } else { // closing parenthesis
+        
+        let stackLength = stack.length;
+        for (let i= stackLength - 1; i >= 0; i--) {
+          let poppedElem = stack.pop();
+          if (poppedElem != '(') {
+            result += poppedElem;
+          } else { // if it is '(', finish the loop
+            break;
+          }
+        }  
       }
     }
 
-    return {
-      numberList: numberList,
-      operatorList: operatorList
-    };
-  }
-
-  // Calculate additions and subtractions. Returns sum
-  function calculateAdditionAndSubtraction(numberList, operatorList) {
-    // If there's some +, - left in the operatorList
-    let firstNum = 0;
-    let secondNum = 0;
-    let sum = 0;
-    let currentOperator = '';
-
-    for(let i = 0; i < operatorList.length; i++) {
-      firstNum = numberList[i];
-      secondNum = numberList[i+1];
-      currentOperator = operatorList[i];
-
-      // For the first operation
-      if (i == 0) {
-        if(isDecimal(firstNum) || isDecimal(secondNum)) {
-          sum = decimalOperate(currentOperator, firstNum, secondNum);  
-        } else {
-          sum = operate(currentOperator, firstNum, secondNum);
-        }
-        continue;
+    // 3. if infix notation ends..
+    if(index === arr.length - 1) {
+      stackLength = stack.length
+      for (let i = 0; i < stackLength; i++) {
+        result += stack.pop()
       }
+    } // last element
+  }) // forEach
 
-      // Since the second operation
-      if(isDecimal(firstNum) || isDecimal(secondNum)) {
-        sum = decimalOperate(currentOperator, sum, secondNum);
-      } else {
-        sum = operate(currentOperator, sum, secondNum);
-      }
+
+  return result;
+} 
+
+  function calcPostfix(values) {
+  let numStack = [];
+  for (let i = 0; i < values.length; i++) {
+    let curElem = values[i];
+    if(Number(curElem)) { // operand, push to the stack
+      numStack.push(Number(curElem));
+    } else { // operator, pop last 2 elements, and do calculatioin regarding
+             // to the operator
+      let firstNum = 0;
+      let secondNum = 0;
+      let operator = curElem;
+      let result = 0;
+      secondNum = numStack.pop();
+      firstNum = numStack.pop();
+
+      result = operate(operator, firstNum, secondNum);
+      numStack.push(result);
     }
 
-    return sum;
+    // When it's end,
+    if(i === values.length - 1) {
+      return numStack[0];
+    }
   }
+}
 
   // Displays the value and operators that has been clicked.
   function updateDisplay(displayValue) {
@@ -325,40 +283,13 @@
 
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
-    let sum = 0;
-    let numberList = [];
-    let operatorList = [];
-
-    console.log(`displayValue: ${displayValue}`);
-
-    let numAndOper = returnNumbersAndOperators(displayValue);
-    numberList = numAndOper.numberList;
-    operatorList = numAndOper.operatorList;
-    console.log('After returnNumbersAndOperators');
-    console.log(numberList);
-    console.log(operatorList);
-
-    console.log(numberList.length)
-    console.log(operatorList.length)
-
-    // When numberList and operatorList don't have the same length, it should
-    // run, ex) numberList = [3], operatorList['+']. You can't do operation
-    if (numberList.length != operatorList.length) {
-      numAndOper = calculateMultiplyAndDivision(numberList, operatorList)
-      numberList = numAndOper.numberList;
-      operatorList = numAndOper.operatorList;
-
-      if (operatorList.length != 0) { // When there's nothing left in the list
-        sum = calculateAdditionAndSubtraction(numberList, operatorList)
-        updateDisplay(sum);
-      } else { // There's +, - left in the operatorList
-        sum = numberList[0];
-        updateDisplay(sum);
-      }
-    } else {
-      updateDisplay(displayValue);
-    }
-    
+    let result = '';
+    let postFix = '';
+    postFix = infixToPostfix(displayValue);
+    console.log(`infix Notation: ${displayValue}`);
+    console.log(`postFix Notation: ${postFix}`);
+    result = calcPostfix(postFix);
+    console.log(result);
     
     
     

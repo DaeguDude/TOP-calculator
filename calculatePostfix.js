@@ -1,3 +1,31 @@
+function add(num1, num2) {
+  return num1 + num2;
+}
+
+function subtract(num1, num2) {
+  return num1 - num2;
+}
+
+function multiply(num1, num2) {
+  return num1 * num2;
+}
+
+function divide(num1, num2) {
+  return num1 / num2;
+}
+
+function operate(operator, num1, num2) {
+  if (operator == '+') {
+    return add(num1, num2)
+  } else if (operator == '-') {
+    return subtract(num1, num2)
+  } else if (operator == 'x') {
+    return multiply(num1, num2)
+  } else if (operator == '÷') {
+    return divide(num1, num2)
+  }
+}
+
 function isOperator(operator) {
   if (
     operator === '+'
@@ -40,6 +68,15 @@ function isLastOperatorEqualOrBigger(last, cur) {
     } else {
       return false;
     }
+  }
+}
+
+function isNumber(number) {
+  // Check typeof and make sure it returns number
+  // This code coerces neither booleans nor strings to numbers,
+  // although it would be possible to do so if desired.
+  if(typeof number !== 'number') {
+    return false;
   }
 }
 
@@ -108,11 +145,31 @@ function infixToPostfix(values) {
 
 
   return result;
-} 
+}
 
+function calcPostfix(values) {
+  let numStack = [];
+  for (let i = 0; i < values.length; i++) {
+    let curElem = values[i];
+    if(Number(curElem)) { // operand, push to the stack
+      numStack.push(Number(curElem));
+    } else { // operator, pop last 2 elements, and do calculatioin regarding
+             // to the operator
+      let firstNum = 0;
+      let secondNum = 0;
+      let operator = curElem;
+      let result = 0;
+      secondNum = numStack.pop();
+      firstNum = numStack.pop();
 
+      result = operate(operator, firstNum, secondNum);
+      numStack.push(result);
+    }
 
-console.log(infixToPostfix('(1+3)x(5+7)')); 
-
-
+    // When it's end,
+    if(i === values.length - 1) {
+      return numStack[0];
+    }
+  }
+}
 
