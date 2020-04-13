@@ -11,10 +11,23 @@ function isOperator(operator) {
   }
 }
 
+function isParenthesis(operator) {
+  if (operator === '(' || operator == ')') {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function isLastOperatorEqualOrBigger(last, cur) {
-  // if current operator is Bigger, false
-  // if currnet operator is less, true
+  // if last operator is Equal or bigger, true
+  // if last operator is less, false
+
+  // if last operator is '(', last operator is less
+  if (last === '(') {
+    return false;
+  }
+  
   if (cur === last) {
     return true;
   }
@@ -52,7 +65,7 @@ function infixToPostfix(values) {
       result += element;
     } 
     
-    // 2. If operator,
+    // 2-1. If operator,
     if (isOperator(element)) {
       // 2.a if stack is empty, just push to the stack
       if(stack.length === 0) { 
@@ -75,6 +88,24 @@ function infixToPostfix(values) {
       }
     } // isOperator
 
+    // 2-2 if parenthesis 
+    if (isParenthesis(element)) {
+      if(element === '(') {
+        stack.push(element);
+      } else { // closing parenthesis
+        
+        let stackLength = stack.length;
+        for (let i= stackLength - 1; i >= 0; i--) {
+          let poppedElem = stack.pop();
+          if (poppedElem != '(') {
+            result += poppedElem;
+          } else { // if it is '(', finish the loop
+            break;
+          }
+        }  
+      }
+    }
+
     // 3. if infix notation ends..
     if(index === arr.length - 1) {
       stackLength = stack.length
@@ -92,9 +123,8 @@ function infixToPostfix(values) {
 // ÷
 // 2 + 4 x 5 = 245x+
 // 2 ÷ 2 x 5 = 
-infixToPostfix('2+45');
-infixToPostfix('2÷2x5');
 
+infixToPostfix('(1+3)x(5+7)'); 
 
 
 
