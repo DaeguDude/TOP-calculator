@@ -166,7 +166,7 @@ function infixToPostfix(infixArray) {
 
 
 
-let infixNotation = returnNumbersAndOperators('(1+3)x(5+70.5)'); 
+let infixNotation = returnNumbersAndOperators('5+5x(50+100)'); 
 console.log(infixToPostfix(infixNotation));
 
 

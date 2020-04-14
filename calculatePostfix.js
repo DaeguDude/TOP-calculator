@@ -71,18 +71,70 @@ function isLastOperatorEqualOrBigger(last, cur) {
   }
 }
 
+function returnNumbersAndOperators(displayValue) {
+  // Parameters
+  //     displayValue: string
 
-function infixToPostfix(values) {
+  // returns an array of numbers and operators in the order
+  // This CAN'T handle wrong expressions yet
+  // ex) 50 x 50 +  throws an error
+  
+  if (displayValue.length == 0) {
+    return displayValue; // return as is
+  } else {
+    let displayValueArray = displayValue.split('');
+    let currentNumber = '';
+    let infixNotationArray = [];
 
-  let result = '';
+    displayValueArray.forEach((element, index, arr) => {
+
+      if( isNaN(Number(element)) && element != '.' ) {
+        // Not a Number or a decimal
+      } else if(element == '.') {
+        // Decimal
+        currentNumber += element;
+      } else {
+        // Number
+        currentNumber += element;
+      }
+
+      if(isOperator(element) || isParenthesis(element)) {
+        if(currentNumber.length === 0) { // there's no number to push
+          infixNotationArray.push(element)
+        } else { // there's a number to push
+          currentNumber = Number(currentNumber);
+          infixNotationArray.push(currentNumber);
+          infixNotationArray.push(element);
+          currentNumber = '';
+        }
+      }
+
+      // If it's the end of the array, add the current number to the Numbers
+      if(index === arr.length - 1) {
+        if (element != ')') {
+          currentNumber = Number(currentNumber);
+          infixNotationArray.push(currentNumber);
+          currentNumber = '';
+        }
+      }
+    });
+    
+    return infixNotationArray;
+  } 
+} 
+
+function infixToPostfix(infixArray) {
+  // parameter
+  //    infixArray: Array
+  
+  // Takes an array of infixNotation and returns an array of postfix Notation
+  let postfixNotation = [];
   let stack = [];
 
-  let splittedValues = values.split('');
-
-  splittedValues.forEach((element, index, arr) => {
+  infixArray.forEach((element, index, arr) => {
     // 1. if operand, add to the notation
-    if (Number(element)) {
-      result += element;
+    if (typeof element === 'number') {
+      postfixNotation.push(element);
     } 
     
     // 2-1. If operator,
@@ -98,11 +150,11 @@ function infixToPostfix(values) {
         // and push current operator to the stack
         if(isLastOperatorEqualOrBigger(lastOperator, currentOperator)) {
           lastOperator = stack.pop();
-          result += lastOperator;
+          postfixNotation.push(lastOperator);
           stack.push(currentOperator);
         } else {
           // 2.b.ii last operator in stack is less than current operator, push
-          // current operator to the notation
+          // current operator to the stack
           stack.push(currentOperator);
         }
       }
@@ -118,7 +170,7 @@ function infixToPostfix(values) {
         for (let i= stackLength - 1; i >= 0; i--) {
           let poppedElem = stack.pop();
           if (poppedElem != '(') {
-            result += poppedElem;
+            postfixNotation.push(poppedElem);
           } else { // if it is '(', finish the loop
             break;
           }
@@ -130,19 +182,19 @@ function infixToPostfix(values) {
     if(index === arr.length - 1) {
       stackLength = stack.length
       for (let i = 0; i < stackLength; i++) {
-        result += stack.pop()
+        postfixNotation.push(stack.pop());
       }
     } // last element
   }) // forEach
 
 
-  return result;
-}
+  return postfixNotation;
+} 
 
-function calcPostfix(values) {
+function calcPostfix(postfixArray) {
   let numStack = [];
-  for (let i = 0; i < values.length; i++) {
-    let curElem = values[i];
+  for (let i = 0; i < postfixArray.length; i++) {
+    let curElem = postfixArray[i];
     if(Number(curElem)) { // operand, push to the stack
       numStack.push(Number(curElem));
     } else { // operator, pop last 2 elements, and do calculatioin regarding
@@ -159,9 +211,14 @@ function calcPostfix(values) {
     }
 
     // When it's end,
-    if(i === values.length - 1) {
+    if(i === postfixArray.length - 1) {
       return numStack[0];
     }
   }
 }
 
+let infixArr = returnNumbersAndOperators('(4+5)x(0+11)');
+console.log(infixArr);
+let postfixArr = infixToPostfix(infixArr);
+console.log(postfixArr);
+console.log(calcPostfix(postfixArr));
