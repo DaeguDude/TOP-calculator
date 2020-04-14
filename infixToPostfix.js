@@ -96,17 +96,18 @@ function isLastOperatorEqualOrBigger(last, cur) {
   }
 }
 
-function infixToPostfix(values) {
-
-  let result = '';
+function infixToPostfix(infixArray) {
+  // parameter
+  //    infixArray: Array
+  
+  // Takes an array of infixNotation and returns an array of postfix Notation
+  let postfixNotation = [];
   let stack = [];
 
-  let splittedValues = values.split('');
-
-  splittedValues.forEach((element, index, arr) => {
+  infixArray.forEach((element, index, arr) => {
     // 1. if operand, add to the notation
     if (Number(element)) {
-      result += element;
+      postfixNotation.push(element);
     } 
     
     // 2-1. If operator,
@@ -122,11 +123,11 @@ function infixToPostfix(values) {
         // and push current operator to the stack
         if(isLastOperatorEqualOrBigger(lastOperator, currentOperator)) {
           lastOperator = stack.pop();
-          result += lastOperator;
+          postfixNotation.push(lastOperator);
           stack.push(currentOperator);
         } else {
           // 2.b.ii last operator in stack is less than current operator, push
-          // current operator to the notation
+          // current operator to the stack
           stack.push(currentOperator);
         }
       }
@@ -142,7 +143,7 @@ function infixToPostfix(values) {
         for (let i= stackLength - 1; i >= 0; i--) {
           let poppedElem = stack.pop();
           if (poppedElem != '(') {
-            result += poppedElem;
+            postfixNotation.push(poppedElem);
           } else { // if it is '(', finish the loop
             break;
           }
@@ -154,18 +155,19 @@ function infixToPostfix(values) {
     if(index === arr.length - 1) {
       stackLength = stack.length
       for (let i = 0; i < stackLength; i++) {
-        result += stack.pop()
+        postfixNotation.push(stack.pop());
       }
     } // last element
   }) // forEach
 
 
-  return result;
+  return postfixNotation;
 } 
 
 
 
-console.log(returnNumbersAndOperator('(1+3)x(5+70.5)')); 
+let infixNotation = returnNumbersAndOperators('(1+3)x(5+70.5)'); 
+console.log(infixToPostfix(infixNotation));
 
 
 
