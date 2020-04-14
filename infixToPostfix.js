@@ -19,6 +19,59 @@ function isParenthesis(operator) {
   }
 }
 
+function returnNumbersAndOperators(displayValue) {
+  // Parameters
+  //     displayValue: string
+
+  // returns an array of numbers and operators in the order
+  // This CAN'T handle wrong expressions yet
+  // ex) 50 x 50 +  throws an error
+  
+  if (displayValue.length == 0) {
+    return displayValue; // return as is
+  } else {
+    let displayValueArray = displayValue.split('');
+    let currentNumber = '';
+    let infixNotationArray = [];
+
+    displayValueArray.forEach((element, index, arr) => {
+
+      if( isNaN(Number(element)) && element != '.' ) {
+        // Not a Number or a decimal
+      } else if(element == '.') {
+        // Decimal
+        currentNumber += element;
+      } else {
+        // Number
+        currentNumber += element;
+      }
+
+      if(isOperator(element) || isParenthesis(element)) {
+        if(currentNumber.length === 0) { // there's no number to push
+          infixNotationArray.push(element)
+        } else { // there's a number to push
+          currentNumber = Number(currentNumber);
+          infixNotationArray.push(currentNumber);
+          infixNotationArray.push(element);
+          currentNumber = '';
+        }
+      }
+
+      // If it's the end of the array, add the current number to the Numbers
+      if(index === arr.length - 1) {
+        if (element != ')') {
+          currentNumber = Number(currentNumber);
+          infixNotationArray.push(currentNumber);
+          currentNumber = '';
+        }
+      }
+    });
+    
+    return infixNotationArray;
+  } 
+} 
+
+
 function isLastOperatorEqualOrBigger(last, cur) {
   // if last operator is Equal or bigger, true
   // if last operator is less, false
@@ -112,7 +165,7 @@ function infixToPostfix(values) {
 
 
 
-console.log(infixToPostfix('(1+3)x(5+7)')); 
+console.log(returnNumbersAndOperator('(1+3)x(5+70.5)')); 
 
 
 

@@ -71,14 +71,6 @@ function isLastOperatorEqualOrBigger(last, cur) {
   }
 }
 
-function isNumber(number) {
-  // Check typeof and make sure it returns number
-  // This code coerces neither booleans nor strings to numbers,
-  // although it would be possible to do so if desired.
-  if(typeof number !== 'number') {
-    return false;
-  }
-}
 
 function infixToPostfix(values) {
 
