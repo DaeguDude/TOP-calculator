@@ -195,7 +195,7 @@ function calcPostfix(postfixArray) {
   let numStack = [];
   for (let i = 0; i < postfixArray.length; i++) {
     let curElem = postfixArray[i];
-    if(Number(curElem)) { // operand, push to the stack
+    if(typeof curElem === 'number') { // operand, push to the stack
       numStack.push(Number(curElem));
     } else { // operator, pop last 2 elements, and do calculatioin regarding
              // to the operator
