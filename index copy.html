@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+  <div id="calculator-body">
+    <div id="display"></div>
+
+    <button id="(">(</button>
+    <button id=")">)</button>
+    <button id="DEL">DEL</button>
+    <button id="AC">AC</button>
+    <button id="seven" data-numbers="7">7</button>
+    
+    <button id="eight" data-numbers="8">8</button>
+    <button id="nine" data-numbers="9">9</button>
+    <button id="divide" data-operator="÷">÷</button>
+    <button id="four" data-numbers="4">4</button>
+    <button id="five" data-numbers="5">5</button>
+    
+    <button id="six" data-numbers="6">6</button>
+    <button id="multiply" data-operator="x">x</button>
+    <button id="one" data-numbers="1">1</button>
+    <button id="two" data-numbers="2">2</button>
+    <button id="three" data-numbers="3">3</button>
+    
+    <button id="subtract" data-operator="-">-</button>
+    <button id="zero" data-numbers="0">0</button>
+    <button id="decimal">.</button>
+    <button id="equal" class="operator">=</button>
+    <button id="add"  data-operator="+">+</button>
+    
+
+  </div>
+</body>
+<script src="big.js/big.min.js"></script>
+<script>
+  const calculatorBody = document.getElementById('calculator-body');
+  const digits = document.querySelectorAll('button[data-numbers]');
+  const operators = document.querySelectorAll('button[data-operator]');
+  const display = document.getElementById('display');
+  const equal = document.getElementById('equal');
+  const decimal = document.getElementById('decimal');
+  const del = document.getElementById('DEL');
+  const openingParenthesis = document.getElementById('(');
+  const closingParenthesis = document.getElementById(')');
+  const allClear = document.getElementById('AC');
+
+  let displayValue = '0';
+  updateDisplay(displayValue);
+
+  function reverseString(str) {
+  let splitString = str.split("");
+  let reverseArray = splitString.reverse(); 
+  let joinArray = reverseArray.join(""); 
+
+  return joinArray; 
+}
+
+
+
+function checkExistingDecimal(str) {
+  // true if there's a decimal, false when there's no decimal
+  let bool = false;
+  let number = '';
+
+  for(let i = str.length-1; i>=0; i--) {
+    // if it's a number or a decimal
+    if(Number(str[i]) || str[i] === '.') {
+      number += str[i];
+    } else {
+      break;
+    }
+  }
+
+  number = reverseString(number);
+  // Now it's time to check if it has a decimal
+  number.split('').forEach((element) => {
+    if(element === '.') {
+      bool = true;
+    }
+  })
+
+  return bool;
+}
+  
+  // Displays the value and operators that has been clicked.
+  function updateDisplay(displayValue) {
+    display.innerHTML = displayValue;
+  }
+
+
+  // Returns the display Value
+  function returnDisplay() {
+    return display.innerHTML
+  }
+
+
+  // Event Listeners for all digits
+  digits.forEach(digit => {
+    digit.addEventListener('click', event => {
+      if (displayValue == '0') { // when first starting, replace 0 with input
+        displayValue = event.target.getAttribute("data-numbers");
+      } else {
+        displayValue += event.target.getAttribute("data-numbers");
+      }
+      updateDisplay(displayValue);
+    })
+  })
+  
+  // Event Listeners for four basic operators
+  operators.forEach(operator => {
+    // let displayValueArray = displayValue.split('');
+    // let lastElement = displayValueArray[displayValueArray.length -1];
+    
+    operator.addEventListener('click', event => {
+      // Check if your last value is operator
+      displayValue += event.target.getAttribute("data-operator");
+      updateDisplay(displayValue);
+    })
+  })
+
+  openingParenthesis.addEventListener('click', event => {
+    if (displayValue == '0') { // when first starting, replace 0 with input
+      displayValue = '(';
+    } else {
+      displayValue += '(';
+    }
+    updateDisplay(displayValue);
+  })
+
+  closingParenthesis.addEventListener('click', event => {
+    displayValue += ')';
+    updateDisplay(displayValue);
+  })
+
+  decimal.addEventListener('click', event => {
+      if (checkExistingDecimal(displayValue) != true) {
+        displayValue += '.';
+        updateDisplay(displayValue);
+      }
+  })
+
+  del.addEventListener('click', event => {
+    let splittedDisplayValue = displayValue.split('');
+    splittedDisplayValue.pop();
+    displayValue = splittedDisplayValue.join('');
+    updateDisplay(displayValue);
+  })
+
+  allClear.addEventListener('click', event => {
+    displayValue = '0';
+    updateDisplay(displayValue);
+  })
+
+  // If equal is clicked, calculate the all the numbers regarding the operators
+  equal.addEventListener('click', event => {
+    
+    
+    
+    
+    
+    
+
+   
+    
+   
+   
+  }) // equal.addEventListener
+
+  
+
+
+</script>
+
+</html>

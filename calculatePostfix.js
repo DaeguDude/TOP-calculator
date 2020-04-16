@@ -191,6 +191,14 @@ function infixToPostfix(infixArray) {
   return postfixNotation;
 } 
 
+function isDecimal(num1) {
+  if (num1 % 1 != 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
 function calcPostfix(postfixArray) {
   // parameter
   //    postfixArray: array
