@@ -71,13 +71,17 @@
 
   function operate(operator, num1, num2) {
   if (operator == '+') {
-    return add(num1, num2)
+    return add(num1, num2);
   } else if (operator == '-') {
-    return subtract(num1, num2)
+    return subtract(num1, num2);
   } else if (operator == 'x') {
-    return multiply(num1, num2)
+    return multiply(num1, num2);
   } else if (operator == '÷') {
-    return divide(num1, num2)
+    if(num2 === 0) {
+      return false;
+    } else {
+      return divide(num1, num2);
+    }
   }
 }
 
@@ -99,9 +103,13 @@
       return Number(sum.valueOf())
     } 
     else if (operator == '÷') {
-      num1 = new Big(num1);
-      sum = num1.div(num2)
-      return Number(sum.valueOf())
+      if(num2 === 0) {
+        return false;
+      } else {
+        num1 = new Big(num1);
+        sum = num1.div(num2)
+        return Number(sum.valueOf())
+      }
     }
   }
 
@@ -305,9 +313,19 @@
           // javascript can't handle specific decimal operations, so I use 
           // big.js
           result = decimalOperate(operator, firstNum, secondNum) 
+          
+          // Was trying to divide by 0
+          if(result === false) {
+            return 'Math ERROR';
+          }
         } else { 
           // not decimal, we can use basic operations
           result = operate(operator, firstNum, secondNum);
+          
+          // Was trying to divide by 0
+          if(result === false) {
+            return 'Math ERROR';
+          }
         }
         numStack.push(result);
       }
