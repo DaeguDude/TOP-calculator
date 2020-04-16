@@ -314,7 +314,11 @@
   })
 
   openingParenthesis.addEventListener('click', event => {
-    displayValue += '(';
+    if (displayValue == '0') { // when first starting, replace 0 with input
+      displayValue = '(';
+    } else {
+      displayValue += '(';
+    }
     updateDisplay(displayValue);
   })
 
@@ -347,7 +351,7 @@
     let result = calcPostfix(postfixArr);
     updateDisplay(result);
     
-    // replace zero..
+    
     
     
     
