@@ -81,6 +81,30 @@
   }
 }
 
+  function decimalOperate(operator, num1, num2) {
+    let sum = 0
+    if (operator == '+') {
+      num1 = new Big(num1);
+      sum = num1.plus(num2)
+      return Number(sum.valueOf())
+    } 
+    else if (operator == '-') {
+      num1 = new Big(num1);
+      sum = num1.minus(num2)
+      return Number(sum.valueOf())
+    } 
+    else if (operator == 'x') {
+      num1 = new Big(num1);
+      sum = num1.times(num2)
+      return Number(sum.valueOf())
+    } 
+    else if (operator == '÷') {
+      num1 = new Big(num1);
+      sum = num1.div(num2)
+      return Number(sum.valueOf())
+    }
+  }
+
   function isOperator(operator) {
   if (
     operator === '+'
@@ -99,6 +123,14 @@
     return true;
   } else {
     return false;
+  }
+}
+
+  function isDecimal(num1) {
+  if (num1 % 1 != 0) {
+    return true
+  } else {
+    return false
   }
 }
 
@@ -253,30 +285,39 @@
   // Takes an array of postfix Notation, and calculates it.
   // and return the result of the calculation. Type of return is 'number'
 
-  let numStack = [];
-  for (let i = 0; i < postfixArray.length; i++) {
-    let curElem = postfixArray[i];
-    if(typeof curElem === 'number') { // operand, push to the stack
-      numStack.push(Number(curElem));
-    } else { // operator, pop last 2 elements, and do calculatioin regarding
-             // to the operator
-      let firstNum = 0;
-      let secondNum = 0;
-      let operator = curElem;
-      let result = 0;
-      secondNum = numStack.pop();
-      firstNum = numStack.pop();
+    let numStack = [];
+    for (let i = 0; i < postfixArray.length; i++) {
+      let curElem = postfixArray[i];
+      if(typeof curElem === 'number') { // operand, push to the stack
+        numStack.push(Number(curElem));
+      } else { // operator, pop last 2 elements, and do calculatioin regarding
+              // to the operator
+        let firstNum = 0;
+        let secondNum = 0;
+        let operator = curElem;
+        let result = 0;
 
-      result = operate(operator, firstNum, secondNum);
-      numStack.push(result);
-    }
+        
+        secondNum = numStack.pop();
+        firstNum = numStack.pop();
 
-    // When it's end,
-    if(i === postfixArray.length - 1) {
-      return numStack[0];
+        if(isDecimal(firstNum) || isDecimal(secondNum)) { 
+          // javascript can't handle specific decimal operations, so I use 
+          // big.js
+          result = decimalOperate(operator, firstNum, secondNum) 
+        } else { 
+          // not decimal, we can use basic operations
+          result = operate(operator, firstNum, secondNum);
+        }
+        numStack.push(result);
+      }
+
+      // When it's end,
+      if(i === postfixArray.length - 1) {
+        return numStack[0];
+      }
     }
   }
-}
   
   // Displays the value and operators that has been clicked.
   function updateDisplay(displayValue) {
@@ -347,8 +388,13 @@
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
     let infixArr = returnNumbersAndOperators(displayValue);
+    console.log(`infixArr: ${infixArr}`);
+    
     let postfixArr = infixToPostfix(infixArr);
+    console.log(`postfixArr: ${postfixArr}`);
+    
     let result = calcPostfix(postfixArr);
+    console.log(`result: ${result}`);
     updateDisplay(result);
     
     
