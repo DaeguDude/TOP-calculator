@@ -94,6 +94,38 @@
   }
 }
 
+  function isParenthesis(operator) {
+  if (operator === '(' || operator == ')') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+  function isLastOperatorEqualOrBigger(last, cur) {
+  // if last operator is Equal or bigger, true
+  // if last operator is less, false
+
+  // if last operator is '(', last operator is less
+  if (last === '(') {
+    return false;
+  }
+  
+  if (cur === last) {
+    return true;
+  }
+
+  if (cur === '+' || cur === '-') {
+    return true;
+  } else {
+    if (last === 'x' || last === '÷') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
   function returnNumbersAndOperators(displayValue) {
   // Parameters
   //     displayValue: string
@@ -146,38 +178,6 @@
   } 
 } 
 
-  function isParenthesis(operator) {
-  if (operator === '(' || operator == ')') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-  function isLastOperatorEqualOrBigger(last, cur) {
-  // if last operator is Equal or bigger, true
-  // if last operator is less, false
-
-  // if last operator is '(', last operator is less
-  if (last === '(') {
-    return false;
-  }
-  
-  if (cur === last) {
-    return true;
-  }
-
-  if (cur === '+' || cur === '-') {
-    return true;
-  } else {
-    if (last === 'x' || last === '÷') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
   function infixToPostfix(infixArray) {
   // parameter
   //    infixArray: Array
@@ -188,7 +188,7 @@
 
   infixArray.forEach((element, index, arr) => {
     // 1. if operand, add to the notation
-    if (Number(element)) {
+    if (typeof element === 'number') {
       postfixNotation.push(element);
     } 
     
@@ -246,11 +246,17 @@
   return postfixNotation;
 } 
 
-  function calcPostfix(values) {
+  function calcPostfix(postfixArray) {
+  // parameter
+  //    postfixArray: array
+
+  // Takes an array of postfix Notation, and calculates it.
+  // and return the result of the calculation. Type of return is 'number'
+
   let numStack = [];
-  for (let i = 0; i < values.length; i++) {
-    let curElem = values[i];
-    if(Number(curElem)) { // operand, push to the stack
+  for (let i = 0; i < postfixArray.length; i++) {
+    let curElem = postfixArray[i];
+    if(typeof curElem === 'number') { // operand, push to the stack
       numStack.push(Number(curElem));
     } else { // operator, pop last 2 elements, and do calculatioin regarding
              // to the operator
@@ -266,12 +272,12 @@
     }
 
     // When it's end,
-    if(i === values.length - 1) {
+    if(i === postfixArray.length - 1) {
       return numStack[0];
     }
   }
 }
-
+  
   // Displays the value and operators that has been clicked.
   function updateDisplay(displayValue) {
     display.innerHTML = displayValue;
@@ -336,16 +342,10 @@
 
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
-    let result = '';
-    let postFix = '';
-    console.log(`displayValue: ${displayValue}`);
-    let numsAndOpers = returnNumbersAndOperators(displayValue);
-    console.log(numsAndOpers);
-    // postFix = infixToPostfix(displayValue);
-    // console.log(`infix Notation: ${displayValue}`);
-    // console.log(`postFix Notation: ${postFix}`);
-    // result = calcPostfix(postFix);
-    // console.log(result);
+    let infixArr = returnNumbersAndOperators(displayValue);
+    let postfixArr = infixToPostfix(infixArr);
+    let result = calcPostfix(postfixArr);
+    updateDisplay(result);
     
     
     

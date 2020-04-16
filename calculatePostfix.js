@@ -192,6 +192,12 @@ function infixToPostfix(infixArray) {
 } 
 
 function calcPostfix(postfixArray) {
+  // parameter
+  //    postfixArray: array
+
+  // Takes an array of postfix Notation, and calculates it.
+  // and return the result of the calculation. Type of return is 'number'
+
   let numStack = [];
   for (let i = 0; i < postfixArray.length; i++) {
     let curElem = postfixArray[i];
