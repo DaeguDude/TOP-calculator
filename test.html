@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #display {
+      width: 800px;
+      height: 800px;
+      font-size: 30px;
+      background: #333;
+      color: white;
+    }
+
+    #display:clicked{
+      border: 3px solid blue;
+    }
+
+    #text-area {
+      width: 100%;
+      height: 100%;
+      font-size: 20px;
+      background: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="display">
+  </div>
+</body>
+  <script>
+  'use strict';
+  
+  let display = document.getElementById('display');
+  let textarea = document.getElementById('text-area');
+  
+  
+  display.addEventListener('keydown', (e) => {
+    display.innerHTML += e.key + "<br>"
+  });
+  
+  </script>
+</html>

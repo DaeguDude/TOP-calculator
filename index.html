@@ -8,7 +8,7 @@
 </head>
 <body>
   <div id="calculator-body">
-    <div id="display"></div>
+    <div id="display" tabindex="-1"></div>
 
     <button id="(">(</button>
     <button id=")">)</button>
@@ -427,12 +427,32 @@
   })
 
   del.addEventListener('click', event => {  
-      let splittedDisplayValue = displayValue.split('');
-      splittedDisplayValue.pop();
-      displayValue = splittedDisplayValue.join('');
-      updateDisplay(displayValue);
-    
+      // Shouldn't remove 0
+      if(displayValue === '0' || typeof displayValue === 'number') {
+        updateDisplay(displayValue);
+      } else {
+        let splittedDisplayValue = displayValue.split('');
+        splittedDisplayValue.pop();
+        displayValue = splittedDisplayValue.join('');
+        updateDisplay(displayValue);
+      }
+      
   })
+  // ****************************************************
+  // div - display keyboard support
+  display.addEventListener('keydown', event => {
+    // digits
+    if(Number(event.key) >= 0 && Number(event.key) <= 9) {
+      console.log(event.key);
+    }
+
+    if(
+      event.key === '.'
+      || event.key
+    )
+  });
+
+  // ****************************************************
 
   allClear.addEventListener('click', event => {
     displayValue = '0';

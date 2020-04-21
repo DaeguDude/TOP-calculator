@@ -1,41 +1,32 @@
-let decimalCount = false;
-let number = '';
+let textarea = document.getElementById('test-target'),
+consoleLog = document.getElementById('console-log'),
+btnClearConsole = document.getElementById('btn-clear-console');
 
-function reverseString(str) {
-  let splitString = str.split("");
-  let reverseArray = splitString.reverse(); 
-  let joinArray = reverseArray.join(""); 
-
-  return joinArray; 
+function logMessage(message) {
+  document.getElementById("console-log").innerHTML += message + "<br>";
 }
 
-
-
-function checkExistingDecimal(str) {
-  // true if there's a decimal, false when there's no decimal
-  let decimalCount = false;
-  let number = '';
-
-  for(let i = str.length-1; i>=0; i--) {
-    // if it's a number or a decimal
-    if(Number(str[i]) || str[i] === '.') {
-      number += str[i];
-    } else {
-      break;
-    }
+textarea.addEventListener('keydown', (e) => {
+  logMessage('keydown event');
+  if (e.repeat === true) {
+    logMessage(e.key);
   }
+  else
+  
+    logMessage(e.key);
+});
 
-  number = reverseString(number);
-  // Now it's time to check if it has a decimal
-  number.split('').forEach((element) => {
-    if(element === '.') {
-      decimalCount = true;
-    }
-  })
+textarea.addEventListener('keyup', (e) => {
+  if (!e.repeat)
+    logMessage(e.key);
+  else
+    logMessage(e.key);
+});
 
-  return decimalCount;
-}
-
-console.log(checkExistingDecimal('.'));
-
-
+btnClearConsole.addEventListener('click', (e) => {
+  let child = consoleLog.firstChild;
+  while (child) {
+   consoleLog.removeChild(child);
+   child = consoleLog.firstChild;
+  }
+});
