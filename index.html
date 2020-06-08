@@ -400,6 +400,21 @@
     
     operator.addEventListener('click', event => {
       // Check if your last value is operator
+      currentOperator = event.target.getAttribute('data-operator');
+      let displaySplit = displayValue.split('');
+      let lastLetter = displaySplit.pop();
+     
+      // WORKING ON HERE!
+      // IF lastElement is operator, swap it with current operator
+      if (
+        currentOperator === '+'
+        || currentOperator === '-'
+        || currentOperator === '÷'
+      ) {
+        if(isOperator(lastLetter))
+      }
+
+
       displayValue += event.target.getAttribute("data-operator");
       updateDisplay(displayValue);
     })
@@ -438,19 +453,21 @@
       }
       
   })
-  // ****************************************************
-  // div - display keyboard support
-  display.addEventListener('keydown', event => {
-    // digits
-    if(Number(event.key) >= 0 && Number(event.key) <= 9) {
-      console.log(event.key);
-    }
+  // // ****************************************************
+  // // div - display keyboard support
+  // display.addEventListener('keydown', event => {
+  //   // digits
+  //   if(Number(event.key) >= 0 && Number(event.key) <= 9) {
+  //     console.log(event.key);
+  //   }
 
-    if(
-      event.key === '.'
-      || event.key
-    )
-  });
+  //   if(
+  //     event.key === '.'
+  //     || event.key
+  //   ) {
+
+  //   }
+  // });
 
   // ****************************************************
 
@@ -462,7 +479,9 @@
   // If equal is clicked, calculate the all the numbers regarding the operators
   equal.addEventListener('click', event => {
     let infixArr = returnNumbersAndOperators(displayValue);
+    console.log(infixArr);
     let postfixArr = infixToPostfix(infixArr);
+    console.log(postfixArr);
     let result = calcPostfix(postfixArr);
     
     displayValue = result;
