@@ -1,7 +1,39 @@
 # The Odin Project - Calculator
 
-At this project, we are going to make a functioning calculator,
-I'm sure this can be used even later for my statistics use as well.
+In this project, we are going to make a calculator that can perform basic
+operations. Besides from making this thing work, in this project, there is one 
+particular thing that I really want to practice. [PROBLEM SOLVING](https://www.theodinproject.com/courses/javascript/lessons/problem-solving-javascript).
+
+I will follow this problem solving skills before I tackle any of the problems
+that I will have encountered.
+
+1. Understand the Problem:
+    - Write down the problem on paper, reword it in plain English until it makes
+    sense to you
+    - Draw diagrams if that helps
+
+2. Plan
+    - Write down the exact steps(Algorithm)
+    - Write down comments for each step(Pseudocode)
+
+3. Divide into sub-problems
+    - Break down a big problem into sub-problems
+    - Find the simplest(You already know the answer)
+    - Make sure your sub-problem being-solved doesn't depend on others being
+    solved
+    - Connect the dot after you finishing all sub-problems
+
+4. Stuck?
+    - Don't be irritated, be curious
+    - Debug: Go step by step through your solution trying to find where
+    you went wrong.
+    - Reassess: Take a step back. Look at the problem from another perspective
+    - Research: Look for a solution in Google. Don't look for a solution for big
+    problems, but sub-problems. That's how you learn.
+
+Okay, this is it. I will follow this steps to make my calculator work!
+
+## Tasks
 
 1. Your calculator is going to contain functions for all of the basic math operators you typically find on simple calculators, so start by creating functions for the following items and testing them in your browser’s console.
 
@@ -46,8 +78,12 @@ I'm sure this can be used even later for my statistics use as well.
 
 10. EXTRA CREDIT: Add keyboard support!
 
-# These are the things I will ask once it finishes... Keep it updated throughout the project!
+## Redo of my Project
 
-### What did you learn from this project?
+### Understand the problem
 
-### What did you do to solve the problem?
+    I have almost finished the calculator project and put it on hold for almost
+    2 months, but there are things I have yet to finish. Most importantly, I
+    didn't meet all the requirements there to do. 
+
+    > I didn't meet all the requirements
